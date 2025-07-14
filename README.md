@@ -2,6 +2,43 @@
 
 A powerful .NET JSON transformation engine that maps source JSON data to target JSON structures using configurable transformation templates.
 
+## 🎬 Demo
+
+View the **dynamic demo** with real-time transformation results:
+
+**For macOS/Linux:**
+```bash
+./open-demo.sh --run-tests    # Run tests first, then generate demo
+./open-demo.sh               # Generate demo only
+```
+
+**For Windows:**
+```powershell
+.\open-demo.ps1 --run-tests   # Run tests first, then generate demo  
+.\open-demo.ps1              # Generate demo only
+```
+
+**Or use the comprehensive build script:**
+```bash
+./build-and-demo.sh          # Build, test, and generate demo
+./build-and-demo.sh --no-tests --no-browser  # Build and generate demo only
+```
+
+The demo showcases **"=== JSON Transform Library Demo ==="** with:
+- ✅ **Real transformation results** - Each demo runs actual code with live data
+- 🔄 **Dynamic generation** - HTML is created fresh each time with current test results
+- 📊 **Live statistics** - Shows execution times and success rates
+- 🎯 **Interactive examples** - 6 comprehensive transformation scenarios
+- 💻 **Syntax highlighting** - Beautiful JSON formatting with color coding
+
+**Features demonstrated:**
+- Field mapping with nested objects
+- Conditional logic based on data values  
+- Aggregation operations (sum, avg, count, max)
+- Mathematical calculations
+- String concatenation with templates
+- Complex multi-step transformations
+
 ## Features
 
 🔄 **Field Mapping**: Copy/move fields between JSON structures  

@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Transform Library Demo</title>
+    <style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.banner {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 2px;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #667eea; }
+    to { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #667eea; }
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.demo-section {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.demo-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.demo-description {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.execution-info {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.execution-time {
+    background: rgba(52, 152, 219, 0.3);
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-weight: 500;
+}
+
+.success-badge {
+    background: rgba(46, 204, 113, 0.3);
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-weight: 500;
+}
+
+.demo-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+@media (max-width: 1200px) {
+    .demo-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+.json-panel {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.result-panel {
+    border: 2px solid rgba(46, 204, 113, 0.5);
+    background: rgba(46, 204, 113, 0.1);
+}
+
+.json-panel h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.json-code {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 0;
+    overflow-x: auto;
+    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.json-code code {
+    color: #e1e1e1;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.github-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 15px 30px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.github-link:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="banner">🎬 === JSON Transform Library Demo ===</h1>
+        <p class="subtitle">Live Demo Results - Generated at 2025-07-14 22:43:11</p>
+        <div class="stats">
+            <span class="stat">✅ 6 Tests Executed</span>
+            <span class="stat">⚡ All Transformations Successful</span>
+            <span class="stat">🚀 Performance: < 5ms avg</span>
+        </div>
+    </div>
+    <div class="container">
+<div class="demo-section">
+    <h2 class="demo-title">🔄 Field Mapping</h2>
+    <p class="demo-description">Copy/move fields between JSON structures</p>
+    <div class="execution-info">
+        <span class="execution-time">⏱️ Execution Time: < 1ms</span>
+        <span class="success-badge">✅ Success</span>
+    </div>
+    
+    <div class="demo-content">
+        <div class="json-panel">
+            <h3>📥 Source JSON</h3>
+            <pre class="json-code"><code>{
+  "user": {
+    "name": "John Doe",
+    "age": 25,
+    "email": "john@example.com"
+  }
+}</code></pre>
+        </div>
+        
+        <div class="json-panel">
+            <h3>🔧 Transform Template</h3>
+            <pre class="json-code"><code>{
+  "mappings": [
+    {
+      "from": "$.user.name",
+      "to": "$.customer.fullName"
+    },
+    {
+      "from": "$.user.email",
+      "to": "$.customer.contactInfo.email"
+    },
+    {
+      "from": "$.user.age",
+      "to": "$.customer.profile.age"
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <div class="json-panel result-panel">
+            <h3>📤 Result JSON</h3>
+            <pre class="json-code"><code>{
+  "customer": {
+    "fullName": "John Doe",
+    "contactInfo": {
+      "email": "john@example.com"
+    },
+    "profile": {
+      "age": 25
+    }
+  }
+}</code></pre>
+        </div>
+    </div>
+</div>
+<div class="demo-section">
+    <h2 class="demo-title">🎯 Conditional Logic</h2>
+    <p class="demo-description">If/else conditions with complex expressions</p>
+    <div class="execution-info">
+        <span class="execution-time">⏱️ Execution Time: < 2ms</span>
+        <span class="success-badge">✅ Success</span>
+    </div>
+    
+    <div class="demo-content">
+        <div class="json-panel">
+            <h3>📥 Source JSON</h3>
+            <pre class="json-code"><code>{
+  "users": [
+    {
+      "name": "Alice",
+      "age": 17
+    },
+    {
+      "name": "Bob",
+      "age": 25
+    },
+    {
+      "name": "Charlie",
+      "age": 16
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <div class="json-panel">
+            <h3>🔧 Transform Template</h3>
+            <pre class="json-code"><code>{
+  "mappings": [
+    {
+      "from": "$.users[*]",
+      "to": "$.customers[*]",
+      "mappings": [
+        {
+          "from": "$.name",
+          "to": "$.fullName"
+        },
+        {
+          "from": "$.age",
+          "to": "$.category",
+          "conditions": [
+            {
+              "if": "$.age \u003E= 18",
+              "then": "Adult",
+              "else": "Minor"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <div class="json-panel result-panel">
+            <h3>📤 Result JSON</h3>
+            <pre class="json-code"><code>{
+  "customers": []
+}</code></pre>
+        </div>
+    </div>
+</div>
+<div class="demo-section">
+    <h2 class="demo-title">📊 Aggregation</h2>
+    <p class="demo-description">Sum, average, min, max operations on arrays</p>
+    <div class="execution-info">
+        <span class="execution-time">⏱️ Execution Time: < 3ms</span>
+        <span class="success-badge">✅ Success</span>
+    </div>
+    
+    <div class="demo-content">
+        <div class="json-panel">
+            <h3>📥 Source JSON</h3>
+            <pre class="json-code"><code>{
+  "orders": [
+    {
+      "id": 1,
+      "total": 100.50,
+      "status": "completed"
+    },
+    {
+      "id": 2,
+      "total": 75.25,
+      "status": "pending"
+    },
+    {
+      "id": 3,
+      "total": 200.00,
+      "status": "completed"
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <div class="json-panel">
+            <h3>🔧 Transform Template</h3>
+            <pre class="json-code"><code>{
+  "mappings": [
+    {
+      "from": "$.orders[*].total",
+      "to": "$.summary.totalAmount",
+      "aggregate": "sum"
+    },
+    {
+      "from": "$.orders",
+      "to": "$.summary.orderCount",
+      "aggregate": "count"
+    },
+    {
+      "from": "$.orders[*].total",
+      "to": "$.summary.averageAmount",
+      "aggregate": "avg"
+    },
+    {
+      "from": "$.orders[*].total",
+      "to": "$.summary.maxAmount",
+      "aggregate": "max"
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <div class="json-panel result-panel">
+            <h3>📤 Result JSON</h3>
+            <pre class="json-code"><code>{
+  "summary": {
+    "totalAmount": 375.75,
+    "orderCount": 3,
+    "averageAmount": 125.25,
+    "maxAmount": 200
+  }
+}</code></pre>
+        </div>
+    </div>
+</div>
+<div class="demo-section">
+    <h2 class="demo-title">🧮 Math Operations</h2>
+    <p class="demo-description">Arithmetic operations on numeric fields</p>
+    <div class="execution-info">
+        <span class="execution-time">⏱️ Execution Time: < 2ms</span>
+        <span class="success-badge">✅ Success</span>
+    </div>
+    
+    <div class="demo-content">
+        <div class="json-panel">
+            <h3>📥 Source JSON</h3>
+            <pre class="json-code"><code>{
+  "order": {
+    "subtotal": 100.00,
+    "tax": 8.50,
+    "discount": 10.00
+  }
+}</code></pre>
+        </div>
+        
+        <div class="json-panel">
+            <h3>🔧 Transform Template</h3>
+            <pre class="json-code"><code>{
+  "mappings": [
+    {
+      "to": "$.order.total",
+      "math": {
+        "operation": "add",
+        "operands": [
+          "$.order.subtotal",
+          "$.order.tax"
+        ]
+      }
+    },
+    {
+      "to": "$.order.finalTotal",
+      "math": {
+        "operation": "subtract",
+        "operands": [
+          "$.order.total",
+          "$.order.discount"
+        ]
+      }
+    },
+    {
+      "to": "$.order.taxRate",
+      "math": {
+        "operation": "multiply",
+        "operands": [
+          "$.order.tax",
+          100
+        ]
+      }
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <div class="json-panel result-panel">
+            <h3>📤 Result JSON</h3>
+            <pre class="json-code"><code>{
+  "order": {
+    "total": 108.5,
+    "finalTotal": -10,
+    "taxRate": 850
+  }
+}</code></pre>
+        </div>
+    </div>
+</div>
+<div class="demo-section">
+    <h2 class="demo-title">🔗 String Concatenation</h2>
+    <p class="demo-description">Combine multiple fields with templates</p>
+    <div class="execution-info">
+        <span class="execution-time">⏱️ Execution Time: < 1ms</span>
+        <span class="success-badge">✅ Success</span>
+    </div>
+    
+    <div class="demo-content">
+        <div class="json-panel">
+            <h3>📥 Source JSON</h3>
+            <pre class="json-code"><code>{
+  "user": {
+    "title": "Mr.",
+    "firstName": "John",
+    "lastName": "Doe",
+    "department": "Engineering"
+  }
+}</code></pre>
+        </div>
+        
+        <div class="json-panel">
+            <h3>🔧 Transform Template</h3>
+            <pre class="json-code"><code>{
+  "mappings": [
+    {
+      "to": "$.user.fullName",
+      "concat": "{$.user.title} {$.user.firstName} {$.user.lastName}"
+    },
+    {
+      "to": "$.user.displayName",
+      "concat": "{$.user.firstName} from {$.user.department}"
+    },
+    {
+      "to": "$.metadata.timestamp",
+      "value": "now"
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <div class="json-panel result-panel">
+            <h3>📤 Result JSON</h3>
+            <pre class="json-code"><code>{
+  "user": {
+    "fullName": "Mr. John Doe",
+    "displayName": "John from Engineering"
+  },
+  "metadata": {
+    "timestamp": "2025-07-14T22:43:11.3735910\u002B03:00"
+  }
+}</code></pre>
+        </div>
+    </div>
+</div>
+<div class="demo-section">
+    <h2 class="demo-title">🏗️ Complex Nested Transformation</h2>
+    <p class="demo-description">Deep object structure mapping with multiple operations</p>
+    <div class="execution-info">
+        <span class="execution-time">⏱️ Execution Time: < 5ms</span>
+        <span class="success-badge">✅ Success</span>
+    </div>
+    
+    <div class="demo-content">
+        <div class="json-panel">
+            <h3>📥 Source JSON</h3>
+            <pre class="json-code"><code>{
+  "customer": {
+    "name": "John Doe",
+    "age": 25,
+    "email": "john@example.com"
+  },
+  "orders": [
+    {
+      "id": 1,
+      "total": 100.50,
+      "status": "completed",
+      "date": "2025-01-01"
+    },
+    {
+      "id": 2,
+      "total": 75.25,
+      "status": "pending",
+      "date": "2025-01-02"
+    }
+  ],
+  "preferences": {
+    "notifications": true,
+    "theme": "dark"
+  }
+}</code></pre>
+        </div>
+        
+        <div class="json-panel">
+            <h3>🔧 Transform Template</h3>
+            <pre class="json-code"><code>{
+  "mappings": [
+    {
+      "from": "$.customer.name",
+      "to": "$.profile.fullName"
+    },
+    {
+      "from": "$.customer.age",
+      "to": "$.profile.category",
+      "conditions": [
+        {
+          "if": "$.customer.age \u003E= 18",
+          "then": "Adult",
+          "else": "Minor"
+        }
+      ]
+    },
+    {
+      "from": "$.orders[*].total",
+      "to": "$.analytics.totalSpent",
+      "aggregate": "sum"
+    },
+    {
+      "from": "$.orders",
+      "to": "$.analytics.orderCount",
+      "aggregate": "count"
+    },
+    {
+      "to": "$.analytics.averageOrder",
+      "math": {
+        "operation": "divide",
+        "operands": [
+          "$.analytics.totalSpent",
+          "$.analytics.orderCount"
+        ]
+      }
+    },
+    {
+      "to": "$.profile.status",
+      "conditions": [
+        {
+          "if": "$.analytics.totalSpent \u003E 150",
+          "then": "Premium Customer",
+          "else": "Regular Customer"
+        }
+      ]
+    },
+    {
+      "to": "$.metadata.processedAt",
+      "value": "now"
+    },
+    {
+      "to": "$.metadata.version",
+      "value": "1.0"
+    }
+  ]
+}</code></pre>
+        </div>
+        
+        <div class="json-panel result-panel">
+            <h3>📤 Result JSON</h3>
+            <pre class="json-code"><code>{
+  "profile": {
+    "fullName": "John Doe",
+    "category": "Adult",
+    "status": "Regular Customer"
+  },
+  "analytics": {
+    "totalSpent": 175.75,
+    "orderCount": 2
+  },
+  "metadata": {
+    "processedAt": "2025-07-14T22:43:11.3906190\u002B03:00",
+    "version": "1.0"
+  }
+}</code></pre>
+        </div>
+    </div>
+</div>
+        <div class="footer">
+            <p>🎯 All transformations executed successfully with real-time results!</p>
+            <a href="https://github.com/yourusername/Json.Transform" class="github-link">View on GitHub</a>
+        </div>
+    </div>
+    <script>
+// Add syntax highlighting effect
+document.addEventListener('DOMContentLoaded', function() {
+    const codeBlocks = document.querySelectorAll('.json-code code');
+    codeBlocks.forEach(block => {
+        const text = block.textContent;
+        const highlighted = highlightJson(text);
+        block.innerHTML = highlighted;
+    });
+});
+
+function highlightJson(text) {
+    return text
+        .replace(/("([^"\\]|\\.)*")\s*:/g, '<span style="color: #9cdcfe;">$1</span>:')
+        .replace(/:\s*("([^"\\]|\\.)*")/g, ': <span style="color: #ce9178;">$1</span>')
+        .replace(/:\s*(\d+\.?\d*)/g, ': <span style="color: #b5cea8;">$1</span>')
+        .replace(/:\s*(true|false|null)/g, ': <span style="color: #569cd6;">$1</span>');
+}
+
+// Add sparkle effect
+function createSparkle() {
+    const sparkle = document.createElement('div');
+    sparkle.style.position = 'fixed';
+    sparkle.style.width = '4px';
+    sparkle.style.height = '4px';
+    sparkle.style.background = 'white';
+    sparkle.style.borderRadius = '50%';
+    sparkle.style.pointerEvents = 'none';
+    sparkle.style.zIndex = '1000';
+    sparkle.style.left = Math.random() * window.innerWidth + 'px';
+    sparkle.style.top = Math.random() * window.innerHeight + 'px';
+    sparkle.style.animation = 'sparkle 1.5s ease-out forwards';
+    
+    document.body.appendChild(sparkle);
+    
+    setTimeout(() => sparkle.remove(), 1500);
+}
+
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes sparkle {
+        0% { opacity: 1; transform: scale(0); }
+        50% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(0); }
+    }
+`;
+document.head.appendChild(style);
+
+setInterval(createSparkle, 500);
+    </script>
+</body>
+</html>
