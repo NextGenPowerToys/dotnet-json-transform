@@ -1,0 +1,15 @@
+{
+  "user": {
+    "name": "John Doe",
+    "age": 25,
+    "email": "john@example.com"
+  },
+  "orders": [
+    {"id": 1, "total": 100.50, "status": "completed"},
+    {"id": 2, "total": 75.25, "status": "pending"}
+  ],
+  "preferences": {
+    "notifications": true,
+    "theme": "dark"
+  }
+}

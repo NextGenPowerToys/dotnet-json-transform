@@ -1,0 +1,17 @@
+{
+  "customer": {
+    "fullName": "",
+    "status": "",
+    "contactInfo": {
+      "email": ""
+    }
+  },
+  "summary": {
+    "totalSpent": 0,
+    "orderCount": 0
+  },
+  "metadata": {
+    "timestamp": "",
+    "version": "1.0"
+  }
+}

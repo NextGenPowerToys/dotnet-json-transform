@@ -1,0 +1,37 @@
+{
+  "mappings": [
+    {
+      "from": "$.user.name",
+      "to": "$.customer.fullName"
+    },
+    {
+      "from": "$.user.email",
+      "to": "$.customer.contactInfo.email"
+    },
+    {
+      "from": "$.orders[*].total",
+      "to": "$.summary.totalSpent",
+      "aggregate": "sum"
+    },
+    {
+      "from": "$.orders",
+      "to": "$.summary.orderCount",
+      "aggregate": "count"
+    },
+    {
+      "from": "$.user.age",
+      "to": "$.customer.status",
+      "conditions": [
+        {
+          "if": "$.user.age >= 18",
+          "then": "Adult",
+          "else": "Minor"
+        }
+      ]
+    },
+    {
+      "to": "$.metadata.timestamp",
+      "value": "now"
+    }
+  ]
+}
