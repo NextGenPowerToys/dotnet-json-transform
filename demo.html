@@ -185,7 +185,7 @@ body {
 <body>
     <div class="header">
         <h1 class="banner">🎬 === JSON Transform Library Demo ===</h1>
-        <p class="subtitle">Live Demo Results - Generated at 2025-07-14 22:43:11</p>
+        <p class="subtitle">Live Demo Results - Generated at 2025-07-14 22:59:36</p>
         <div class="stats">
             <span class="stat">✅ 6 Tests Executed</span>
             <span class="stat">⚡ All Transformations Successful</span>
@@ -261,20 +261,10 @@ body {
         <div class="json-panel">
             <h3>📥 Source JSON</h3>
             <pre class="json-code"><code>{
-  "users": [
-    {
-      "name": "Alice",
-      "age": 17
-    },
-    {
-      "name": "Bob",
-      "age": 25
-    },
-    {
-      "name": "Charlie",
-      "age": 16
-    }
-  ]
+  "user": {
+    "name": "Alice",
+    "age": 17
+  }
 }</code></pre>
         </div>
         
@@ -283,23 +273,34 @@ body {
             <pre class="json-code"><code>{
   "mappings": [
     {
-      "from": "$.users[*]",
-      "to": "$.customers[*]",
-      "mappings": [
+      "from": "$.user.name",
+      "to": "$.customer.fullName"
+    },
+    {
+      "from": "$.user.age",
+      "to": "$.customer.category",
+      "conditions": [
         {
-          "from": "$.name",
-          "to": "$.fullName"
-        },
+          "if": "$.user.age >= 18",
+          "then": "Adult",
+          "else": "Minor"
+        }
+      ]
+    },
+    {
+      "from": "$.user.age",
+      "to": "$.customer.ageGroup",
+      "conditions": [
         {
-          "from": "$.age",
-          "to": "$.category",
-          "conditions": [
+          "if": "$.user.age >= 65",
+          "then": "Senior",
+          "elseif": [
             {
-              "if": "$.age \u003E= 18",
-              "then": "Adult",
-              "else": "Minor"
+              "if": "$.user.age >= 18",
+              "then": "Adult"
             }
-          ]
+          ],
+          "else": "Minor"
         }
       ]
     }
@@ -310,7 +311,11 @@ body {
         <div class="json-panel result-panel">
             <h3>📤 Result JSON</h3>
             <pre class="json-code"><code>{
-  "customers": []
+  "customer": {
+    "fullName": "Alice",
+    "category": "Minor",
+    "ageGroup": "Minor"
+  }
 }</code></pre>
         </div>
     </div>
@@ -507,7 +512,7 @@ body {
     "displayName": "John from Engineering"
   },
   "metadata": {
-    "timestamp": "2025-07-14T22:43:11.3735910\u002B03:00"
+    "timestamp": "2025-07-14T22:59:36.3270410+03:00"
   }
 }</code></pre>
         </div>
@@ -564,7 +569,7 @@ body {
       "to": "$.profile.category",
       "conditions": [
         {
-          "if": "$.customer.age \u003E= 18",
+          "if": "$.customer.age >= 18",
           "then": "Adult",
           "else": "Minor"
         }
@@ -594,7 +599,7 @@ body {
       "to": "$.profile.status",
       "conditions": [
         {
-          "if": "$.analytics.totalSpent \u003E 150",
+          "if": "$.analytics.totalSpent > 150",
           "then": "Premium Customer",
           "else": "Regular Customer"
         }
@@ -625,7 +630,7 @@ body {
     "orderCount": 2
   },
   "metadata": {
-    "processedAt": "2025-07-14T22:43:11.3906190\u002B03:00",
+    "processedAt": "2025-07-14T22:59:36.3362900+03:00",
     "version": "1.0"
   }
 }</code></pre>

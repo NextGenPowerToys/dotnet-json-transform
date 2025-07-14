@@ -91,13 +91,9 @@ class Program
                     "to": "$.customer.category",
                     "conditions": [
                         {
-                            "if": "$.user.age >= 65",
-                            "then": "Senior",
-                            "else": {
-                                "if": "$.user.age >= 18",
-                                "then": "Adult",
-                                "else": "Minor"
-                            }
+                            "if": "$.user.age >= 18",
+                            "then": "Adult",
+                            "else": "Minor"
                         }
                     ]
                 },
@@ -346,7 +342,8 @@ class Program
             var jsonDoc = JsonDocument.Parse(json);
             return JsonSerializer.Serialize(jsonDoc, new JsonSerializerOptions 
             { 
-                WriteIndented = true 
+                WriteIndented = true,
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
         }
         catch

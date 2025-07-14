@@ -114,11 +114,10 @@ public class DemoGenerator
     {
         var sourceJson = """
         {
-            "users": [
-                {"name": "Alice", "age": 17},
-                {"name": "Bob", "age": 25},
-                {"name": "Charlie", "age": 16}
-            ]
+            "user": {
+                "name": "Alice",
+                "age": 17
+            }
         }
         """;
 
@@ -126,23 +125,34 @@ public class DemoGenerator
         {
             "mappings": [
                 {
-                    "from": "$.users[*]",
-                    "to": "$.customers[*]",
-                    "mappings": [
+                    "from": "$.user.name",
+                    "to": "$.customer.fullName"
+                },
+                {
+                    "from": "$.user.age",
+                    "to": "$.customer.category",
+                    "conditions": [
                         {
-                            "from": "$.name",
-                            "to": "$.fullName"
-                        },
+                            "if": "$.user.age >= 18",
+                            "then": "Adult",
+                            "else": "Minor"
+                        }
+                    ]
+                },
+                {
+                    "from": "$.user.age",
+                    "to": "$.customer.ageGroup",
+                    "conditions": [
                         {
-                            "from": "$.age",
-                            "to": "$.category",
-                            "conditions": [
+                            "if": "$.user.age >= 65",
+                            "then": "Senior",
+                            "elseif": [
                                 {
-                                    "if": "$.age >= 18",
-                                    "then": "Adult",
-                                    "else": "Minor"
+                                    "if": "$.user.age >= 18",
+                                    "then": "Adult"
                                 }
-                            ]
+                            ],
+                            "else": "Minor"
                         }
                     ]
                 }
@@ -408,7 +418,11 @@ public class DemoGenerator
         try
         {
             var jsonDocument = JsonDocument.Parse(json);
-            return JsonSerializer.Serialize(jsonDocument, new JsonSerializerOptions { WriteIndented = true });
+            return JsonSerializer.Serialize(jsonDocument, new JsonSerializerOptions 
+            { 
+                WriteIndented = true,
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            });
         }
         catch
         {
