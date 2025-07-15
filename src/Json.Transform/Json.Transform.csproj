@@ -34,14 +34,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JsonPath.Net" Version="1.0.5" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="Examples/**/*" />
     <Compile Remove="DemoRunner/**/*" />
     <None Include="Examples/**/*" />
     <None Include="DemoRunner/**/*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonPath.Net" Version="1.0.5" />
   </ItemGroup>
 
 </Project>

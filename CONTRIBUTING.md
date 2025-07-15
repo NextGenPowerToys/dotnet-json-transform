@@ -197,6 +197,16 @@ Please include:
 - Git
 - Visual Studio 2022, VS Code, or JetBrains Rider
 
+### Dependencies
+
+The project uses the following key dependencies:
+
+- **JsonPath.Net (1.0.5)**: Core JSONPath expression evaluation for field mapping and data extraction
+- **System.Text.Json**: Built-in .NET JSON handling (no external JSON dependencies)
+- **xUnit**: Unit testing framework
+- **FluentAssertions**: Readable test assertions
+- **BenchmarkDotNet**: Performance benchmarking
+
 ### Local Development
 
 ```bash
