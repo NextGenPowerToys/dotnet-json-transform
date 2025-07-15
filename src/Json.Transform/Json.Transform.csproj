@@ -17,8 +17,8 @@
     <Product>Json.Transform</Product>
     <Description>A powerful .NET JSON transformation engine that maps source JSON data to target JSON structures using configurable transformation templates. Supports field mapping, aggregation, conditional logic, mathematical operations, string concatenation, constants, and nested transformations.</Description>
     <PackageTags>json;transformation;mapping;templating;jsonpath;data-transformation;json-processing;conditional-logic;aggregation;math-operations</PackageTags>
-    <PackageProjectUrl>https://github.com/NextGenPowerToys/Json.Transform</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/NextGenPowerToys/Json.Transform</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/NextGenPowerToys/dotnet-json-transform</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/NextGenPowerToys/dotnet-json-transform</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
