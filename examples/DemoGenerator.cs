@@ -3,7 +3,7 @@ using System.Text.Json;
 using Json.Transform.Core;
 using Json.Transform.Models;
 
-namespace Json.Transform.Demo;
+namespace Json.Transform.Examples;
 
 /// <summary>
 /// Generates dynamic HTML demo with real transformation results

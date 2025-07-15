@@ -6,25 +6,25 @@ echo "========================================"
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DEMO_RUNNER_DIR="$SCRIPT_DIR/src/Json.Transform/DemoRunner"
+EXAMPLES_DIR="$SCRIPT_DIR/examples"
 
 # Check if we should run tests first
 RUN_TESTS=""
 if [ "$1" = "--run-tests" ] || [ "$1" = "-t" ]; then
-    RUN_TESTS="--run-tests"
+    RUN_TESTS="--tests"
     echo "🧪 Will run tests before generating demo"
 fi
 
-# Build and run the demo generator
-echo "🔧 Building demo generator..."
-cd "$DEMO_RUNNER_DIR"
-if ! dotnet build --configuration Release > /dev/null 2>&1; then
-    echo "❌ Error: Failed to build demo generator"
+# Build and run the examples project with demo generation
+echo "🔧 Building examples project..."
+cd "$SCRIPT_DIR"
+if ! dotnet build examples/Json.Transform.Examples.csproj --configuration Release > /dev/null 2>&1; then
+    echo "❌ Error: Failed to build examples project"
     exit 1
 fi
 
 echo "🔄 Generating dynamic demo with real transformation results..."
-dotnet run --configuration Release -- $RUN_TESTS --output "$SCRIPT_DIR/demo.html"
+dotnet run --project examples/Json.Transform.Examples.csproj --configuration Release -- $RUN_TESTS --demo
 
 if [ $? -eq 0 ]; then
     echo "✅ Demo generated and opened successfully!"

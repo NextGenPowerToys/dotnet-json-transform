@@ -5,12 +5,10 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>Json.Transform.DemoRunner</AssemblyName>
-    <RootNamespace>Json.Transform.DemoRunner</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Json.Transform.csproj" />
+    <ProjectReference Include="../src/Json.Transform/Json.Transform.csproj" />
   </ItemGroup>
 
 </Project>

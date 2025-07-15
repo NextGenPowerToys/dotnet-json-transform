@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Json.Transform.Benchmarks", "benchmarks\Json.Transform.Benchmarks\Json.Transform.Benchmarks.csproj", "{6BBCFAA5-B204-4740-9949-D1F3F5F099A8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{D7F8A4E1-2B6C-4F3A-8E9D-1A2B3C4D5E6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Json.Transform.Examples", "examples\Json.Transform.Examples.csproj", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,10 +40,15 @@ Global
 		{6BBCFAA5-B204-4740-9949-D1F3F5F099A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BBCFAA5-B204-4740-9949-D1F3F5F099A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BBCFAA5-B204-4740-9949-D1F3F5F099A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B0305D86-0D8B-447F-8681-47244F726CCC} = {4704109F-3039-4094-A604-4CFEC3738BCB}
 		{B33CE1DF-4CCC-423E-92D4-6BC0F673634D} = {06E73629-2A60-4C07-B377-34A13AB812AF}
 		{6BBCFAA5-B204-4740-9949-D1F3F5F099A8} = {5B7ECFDD-174E-4C2C-B613-2D229FD122CA}
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890} = {D7F8A4E1-2B6C-4F3A-8E9D-1A2B3C4D5E6F}
 	EndGlobalSection
 EndGlobal

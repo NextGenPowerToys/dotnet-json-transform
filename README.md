@@ -275,14 +275,27 @@ The library provides comprehensive error handling with custom exception types:
 
 ## Examples
 
-Check out the [Examples](src/Json.Transform/Examples/Program.cs) folder for comprehensive usage examples including:
+Check out the [examples](examples/) folder for comprehensive usage examples including:
 
 - Simple field mapping
-- Conditional transformations
+- Conditional transformations  
 - String concatenation
 - Aggregation operations
 - Mathematical calculations
 - Complex nested transformations
+
+### Running Examples
+
+```bash
+# Run all examples
+dotnet run --project examples/Json.Transform.Examples.csproj
+
+# Generate interactive HTML demo
+dotnet run --project examples/Json.Transform.Examples.csproj -- --demo
+
+# Run tests first, then examples
+dotnet run --project examples/Json.Transform.Examples.csproj -- --tests
+```
 
 ## Building and Testing
 
