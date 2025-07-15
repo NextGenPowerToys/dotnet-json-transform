@@ -6,11 +6,11 @@ using Json.Transform.Models;
 namespace Json.Transform.Core;
 
 /// <summary>
-/// Handles evaluation of conditional expressions
+/// Handles evaluation of conditional expressions with support for complex boolean logic
 /// </summary>
 public class ConditionEvaluator
 {
-    private static readonly Regex ConditionRegex = new Regex(
+    private static readonly Regex SimpleConditionRegex = new Regex(
         @"(?<left>[^\s>=<!]+)\s*(?<operator>>=|<=|==|!=|>|<|contains|startsWith|endsWith)\s*(?<right>.+)",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -52,7 +52,7 @@ public class ConditionEvaluator
     }
 
     /// <summary>
-    /// Evaluates a conditional expression and returns true/false
+    /// Evaluates a conditional expression with support for complex boolean logic (&amp;&amp;, ||)
     /// </summary>
     /// <param name="expression">The expression to evaluate</param>
     /// <param name="sourceData">The source JSON data</param>
@@ -62,7 +62,143 @@ public class ConditionEvaluator
         if (string.IsNullOrEmpty(expression))
             return false;
 
-        var match = ConditionRegex.Match(expression.Trim());
+        expression = expression.Trim();
+
+        // Handle complex expressions with && and ||
+        if (ContainsLogicalOperators(expression))
+        {
+            return EvaluateComplexExpression(expression, sourceData);
+        }
+
+        // Handle simple expressions
+        return EvaluateSimpleExpression(expression, sourceData);
+    }
+
+    /// <summary>
+    /// Checks if expression contains logical operators (&&, ||)
+    /// </summary>
+    private static bool ContainsLogicalOperators(string expression)
+    {
+        return expression.Contains("&&") || expression.Contains("||");
+    }
+
+    /// <summary>
+    /// Evaluates complex expressions with boolean logic
+    /// </summary>
+    private static bool EvaluateComplexExpression(string expression, JsonNode? sourceData)
+    {
+        // Handle parentheses first
+        expression = ResolveParentheses(expression, sourceData);
+
+        // Split by || operators (lowest precedence)
+        var orParts = SplitByOperator(expression, "||");
+        if (orParts.Count > 1)
+        {
+            return orParts.Any(part => EvaluateExpression(part.Trim(), sourceData));
+        }
+
+        // Split by && operators (higher precedence)
+        var andParts = SplitByOperator(expression, "&&");
+        if (andParts.Count > 1)
+        {
+            return andParts.All(part => EvaluateExpression(part.Trim(), sourceData));
+        }
+
+        // If no logical operators found, evaluate as simple expression
+        return EvaluateSimpleExpression(expression, sourceData);
+    }
+
+    /// <summary>
+    /// Resolves expressions in parentheses
+    /// </summary>
+    private static string ResolveParentheses(string expression, JsonNode? sourceData)
+    {
+        while (expression.Contains('('))
+        {
+            var start = expression.LastIndexOf('(');
+            var end = expression.IndexOf(')', start);
+            
+            if (end == -1)
+                throw new InvalidConditionException(expression, "Mismatched parentheses");
+
+            var innerExpression = expression.Substring(start + 1, end - start - 1);
+            var result = EvaluateExpression(innerExpression, sourceData);
+            
+            expression = expression.Substring(0, start) + 
+                        (result ? "true" : "false") + 
+                        expression.Substring(end + 1);
+        }
+        return expression;
+    }
+
+    /// <summary>
+    /// Splits expression by logical operator while respecting operator precedence
+    /// </summary>
+    private static List<string> SplitByOperator(string expression, string op)
+    {
+        var parts = new List<string>();
+        var current = "";
+        var i = 0;
+        
+        while (i < expression.Length)
+        {
+            if (i <= expression.Length - op.Length && 
+                expression.Substring(i, op.Length) == op)
+            {
+                // Check if this operator is not part of a comparison operator
+                if (!IsPartOfComparisonOperator(expression, i, op))
+                {
+                    parts.Add(current.Trim());
+                    current = "";
+                    i += op.Length;
+                    continue;
+                }
+            }
+            current += expression[i];
+            i++;
+        }
+        
+        parts.Add(current.Trim());
+        return parts.Where(p => !string.IsNullOrEmpty(p)).ToList();
+    }
+
+    /// <summary>
+    /// Checks if the operator at position is part of a comparison operator (like >= or <=)
+    /// </summary>
+    private static bool IsPartOfComparisonOperator(string expression, int position, string op)
+    {
+        if (op != "&" && op != "|") return false;
+        
+        // Check if preceded or followed by =, >, <
+        if (position > 0)
+        {
+            var prev = expression[position - 1];
+            if (prev == '>' || prev == '<' || prev == '=' || prev == '!')
+                return true;
+        }
+        
+        if (position < expression.Length - 1)
+        {
+            var next = expression[position + 1];
+            if (next == '=' || next == '>' || next == '<')
+                return true;
+        }
+        
+        return false;
+    }
+
+    /// <summary>
+    /// Evaluates a simple conditional expression (no boolean operators)
+    /// </summary>
+    private static bool EvaluateSimpleExpression(string expression, JsonNode? sourceData)
+    {
+        // Handle boolean literals
+        if (expression.Equals("true", StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (expression.Equals("false", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        var match = SimpleConditionRegex.Match(expression);
         if (!match.Success)
             throw new InvalidConditionException(expression, "Invalid condition format");
 

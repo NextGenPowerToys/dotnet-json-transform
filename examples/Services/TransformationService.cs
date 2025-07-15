@@ -224,6 +224,122 @@ public class TransformationService
                     ]
                 }
                 """
+            },
+            new ExampleScenario
+            {
+                Name = "Multi-Condition Logic",
+                Description = "Complex conditional logic with multiple criteria and nested conditions",
+                SourceJson = """
+                {
+                    "employee": {
+                        "name": "Sarah Johnson",
+                        "age": 28,
+                        "department": "Engineering", 
+                        "yearsOfExperience": 5,
+                        "performanceScore": 8.5,
+                        "isManager": false,
+                        "location": "Remote"
+                    }
+                }
+                """,
+                TemplateJson = """
+                {
+                    "mappings": [
+                        {
+                            "from": "$.employee.name",
+                            "to": "$.result.employeeName"
+                        },
+                        {
+                            "from": "$.employee.age",
+                            "to": "$.result.ageCategory",
+                            "conditions": [
+                                {
+                                    "if": "$.employee.age >= 60",
+                                    "then": "Senior",
+                                    "elseif": [
+                                        {
+                                            "if": "$.employee.age >= 40",
+                                            "then": "Mid-Career"
+                                        },
+                                        {
+                                            "if": "$.employee.age >= 25",
+                                            "then": "Early Career"
+                                        }
+                                    ],
+                                    "else": "Entry Level"
+                                }
+                            ]
+                        },
+                        {
+                            "from": "$.employee.performanceScore",
+                            "to": "$.result.performanceLevel",
+                            "conditions": [
+                                {
+                                    "if": "$.employee.performanceScore >= 9.0",
+                                    "then": "Exceptional",
+                                    "elseif": [
+                                        {
+                                            "if": "$.employee.performanceScore >= 7.5",
+                                            "then": "High Performer"
+                                        },
+                                        {
+                                            "if": "$.employee.performanceScore >= 6.0",
+                                            "then": "Good Performer"
+                                        }
+                                    ],
+                                    "else": "Needs Improvement"
+                                }
+                            ]
+                        },
+                        {
+                            "from": "$.employee.yearsOfExperience",
+                            "to": "$.result.eligibleForPromotion",
+                            "conditions": [
+                                {
+                                    "if": "$.employee.yearsOfExperience >= 3",
+                                    "then": "Yes",
+                                    "else": "No"
+                                }
+                            ]
+                        },
+                        {
+                            "from": "$.employee.department",
+                            "to": "$.result.workStyle",
+                            "conditions": [
+                                {
+                                    "if": "$.employee.location == \"Remote\"",
+                                    "then": "Remote Worker",
+                                    "elseif": [
+                                        {
+                                            "if": "$.employee.department contains \"Engineering\"",
+                                            "then": "Technical Team"
+                                        },
+                                        {
+                                            "if": "$.employee.department contains \"Sales\"", 
+                                            "then": "Client Facing"
+                                        }
+                                    ],
+                                    "else": "Office Based"
+                                }
+                            ]
+                        },
+                        {
+                            "to": "$.result.bonusEligible",
+                            "conditions": [
+                                {
+                                    "if": "$.employee.performanceScore >= 8.0",
+                                    "then": "Eligible for Performance Bonus",
+                                    "else": "Standard Compensation"
+                                }
+                            ]
+                        },
+                        {
+                            "to": "$.result.summary",
+                            "concat": "{$.employee.name} is a {$.result.performanceLevel} in the {$.result.ageCategory} category"
+                        }
+                    ]
+                }
+                """
             }
         };
     }
