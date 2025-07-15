@@ -10,10 +10,10 @@
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     
     <!-- Package Information -->
-    <PackageId>NextGenPowerToys.Json.Transform</PackageId>
-    <PackageVersion>1.0.0-alpha.3</PackageVersion>
-    <Authors>NextGenPowerToys</Authors>
-    <Company>NextGenPowerToys</Company>
+    <PackageId>NextGetPowerToy.Json.Transform</PackageId>
+    <PackageVersion>1.0.0-alpha.4</PackageVersion>
+    <Authors>NextGetPowerToy</Authors>
+    <Company>NextGetPowerToy</Company>
     <Product>Json.Transform</Product>
     <Description>⚠️ ALPHA VERSION - FOR TESTING PURPOSES ONLY ⚠️ A powerful .NET JSON transformation engine that maps source JSON data to target JSON structures using configurable transformation templates. Supports field mapping, aggregation, conditional logic, mathematical operations, string concatenation, constants, and nested transformations. This is an experimental alpha release - use at your own risk.</Description>
     <PackageTags>json;transformation;mapping;templating;jsonpath;data-transformation;json-processing;conditional-logic;aggregation;math-operations</PackageTags>
@@ -24,7 +24,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>⚠️ ALPHA RELEASE - TESTING ONLY ⚠️ Alpha release with package README included. This version includes complete documentation in the NuGet package. This is an experimental version for testing and feedback purposes. Not recommended for production use.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Copyright>Copyright (c) 2025 NextGenPowerToys</Copyright>
+    <Copyright>Copyright (c) 2025 NextGetPowerToys</Copyright>
     
     <!-- Code Analysis and Quality -->
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
