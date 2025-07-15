@@ -2,42 +2,30 @@
 
 A powerful .NET JSON transformation engine that maps source JSON data to target JSON structures using configurable transformation templates.
 
-## 🎬 Demo
+## 🚀 Quick Start
 
-View the **dynamic demo** with real-time transformation results:
+### Multiple Ways to Experience Json.Transform
 
-**For macOS/Linux:**
+#### 1. 🌐 **Interactive Web API** (Recommended)
 ```bash
-./open-demo.sh --run-tests    # Run tests first, then generate demo
-./open-demo.sh               # Generate demo only
+cd examples
+dotnet run -- --api
+# Visit http://localhost:5000 for Swagger UI
 ```
 
-**For Windows:**
-```powershell
-.\open-demo.ps1 --run-tests   # Run tests first, then generate demo  
-.\open-demo.ps1              # Generate demo only
-```
-
-**Or use the comprehensive build script:**
+#### 2. 🎬 **Live Console Demo**
 ```bash
-./build-and-demo.sh          # Build, test, and generate demo
-./build-and-demo.sh --no-tests --no-browser  # Build and generate demo only
+cd examples
+dotnet run -- --demo    # Generate and open HTML demo
+dotnet run              # Run console examples
 ```
 
-The demo showcases **"=== JSON Transform Library Demo ==="** with:
-- ✅ **Real transformation results** - Each demo runs actual code with live data
-- 🔄 **Dynamic generation** - HTML is created fresh each time with current test results
-- 📊 **Live statistics** - Shows execution times and success rates
-- 🎯 **Interactive examples** - 6 comprehensive transformation scenarios
-- 💻 **Syntax highlighting** - Beautiful JSON formatting with color coding
-
-**Features demonstrated:**
-- Field mapping with nested objects
-- Conditional logic based on data values  
-- Aggregation operations (sum, avg, count, max)
-- Mathematical calculations
-- String concatenation with templates
-- Complex multi-step transformations
+#### 3. 🧪 **Run Tests & Benchmarks**
+```bash
+dotnet test                                    # Run all tests
+dotnet run --project benchmarks --configuration Release  # Performance benchmarks
+cd examples && dotnet run -- --tests          # Quick test validation
+```
 
 ## Features
 
@@ -48,16 +36,46 @@ The demo showcases **"=== JSON Transform Library Demo ==="** with:
 🔗 **String Concatenation**: Combine multiple fields with templates  
 📝 **Constants**: Inject static values (timestamps, GUIDs, etc.)  
 🏗️ **Nested Transformations**: Deep object structure mapping  
-
-## Quick Start
-
-### Installation
+🌐 **REST API**: Interactive Swagger UI for testing transformations  
+## Installation
 
 ```bash
 dotnet add package Json.Transform
 ```
 
-### Basic Usage
+### Dependencies
+- **JsonPath.Net** (1.0.5) - JSONPath expression evaluation  
+- **System.Text.Json** - High-performance JSON processing (built-in)
+
+## API Reference
+
+### 🌐 Interactive Web API
+
+Start the REST API server with Swagger UI:
+
+```bash
+cd examples
+dotnet run -- --api --port 5001
+# Visit http://localhost:5001 for interactive API documentation
+```
+
+**Available Endpoints:**
+- `POST /api/transform` - Transform JSON with custom templates
+- `GET /api/examples` - Get predefined example scenarios  
+- `POST /api/transform/example/{name}` - Run specific example
+- `GET /api/health` - Health check
+
+**Example API Usage:**
+```bash
+curl -X POST "http://localhost:5001/api/transform" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sourceJson": "{\"user\": {\"name\": \"John\", \"age\": 30}}",
+    "templateJson": "{\"mappings\": [{\"from\": \"$.user.name\", \"to\": \"$.customer.fullName\"}]}"
+  }'
+```
+
+### 💻 Programmatic Usage
 
 ```csharp
 using Json.Transform.Core;
@@ -267,55 +285,114 @@ The library provides comprehensive error handling with custom exception types:
 - `MathOperationException`: When mathematical operations fail
 - `AggregationException`: When aggregation operations fail
 
-## Performance
+## 📊 Performance Benchmarks
 
+**Latest benchmark results (macOS M1 Pro, .NET 9.0):**
+
+| Operation | Mean Time | Relative Performance | Memory Usage |
+|-----------|-----------|---------------------|--------------|
+| Math Operations | 4.4 μs | Fastest (baseline) | 8.04 KB |
+| Conditional Logic | 4.6 μs | 1.05x | 8.42 KB |
+| Simple Field Mapping | 62.7 μs | 14.3x | 8.76 KB |
+| Large Data Aggregation | 119.2 μs | 27.1x | 255.9 KB |
+| String Concatenation | 439.4 μs | 100x | 17.76 KB |
+| Complex Transformation | 485.6 μs | 110x | 25.75 KB |
+
+**Run benchmarks yourself:**
+```bash
+dotnet run --project benchmarks --configuration Release
+# View HTML report at: BenchmarkDotNet.Artifacts/results/
+```
+
+**Performance Targets:**
 - **Throughput**: 1000+ transformations/sec for medium JSON (~5KB)
-- **Memory**: < 50MB for 1000 transformations
+- **Memory**: < 50MB for 1000 transformations  
 - **Latency**: < 10ms per transformation (P95)
 
-## Examples
+## 🎯 Examples & Demo
 
-Check out the [examples](examples/) folder for comprehensive usage examples including:
+### Interactive Examples
 
-- Simple field mapping
-- Conditional transformations  
-- String concatenation
-- Aggregation operations
-- Mathematical calculations
-- Complex nested transformations
-
-### Running Examples
+The `examples/` project provides multiple ways to explore the library:
 
 ```bash
-# Run all examples
-dotnet run --project examples/Json.Transform.Examples.csproj
+cd examples
 
-# Generate interactive HTML demo
-dotnet run --project examples/Json.Transform.Examples.csproj -- --demo
+# 🌐 Web API with Swagger UI (Interactive)
+dotnet run -- --api                    # http://localhost:5000
 
-# Run tests first, then examples
-dotnet run --project examples/Json.Transform.Examples.csproj -- --tests
+# 🎬 Generate HTML Demo
+dotnet run -- --demo                   # Creates demo.html
+
+# 🧪 Run Tests + Examples  
+dotnet run -- --tests                  # Validate & run examples
+
+# 📝 Console Examples Only
+dotnet run                              # Display transformation examples
 ```
 
-## Building and Testing
+### Example Scenarios
+
+The library includes 6 comprehensive transformation scenarios:
+
+1. **Field Mapping** - Basic field copying and restructuring
+2. **Conditional Logic** - Age-based categorization with if/else
+3. **Aggregation** - Sum, average, count operations on arrays
+4. **Math Operations** - Arithmetic calculations with mixed operands
+5. **String Concatenation** - Template-based string building
+6. **Complex Transformation** - Multi-step nested transformations
+
+## 🛠️ Building and Testing
 
 ```bash
-# Build the project
+# Clone and setup
+git clone https://github.com/yourusername/Json.Transform.git
+cd Json.Transform
+dotnet restore
+
+# Build the solution
 dotnet build
 
-# Run tests
+# Run all tests (8 unit tests)
 dotnet test
 
-# Run the examples
-cd src/Json.Transform/Examples
-dotnet run
+# Run performance benchmarks
+dotnet run --project benchmarks --configuration Release
+
+# Try the interactive examples
+cd examples
+dotnet run -- --api    # Web API + Swagger UI
+dotnet run -- --demo   # HTML demo generation
+dotnet run              # Console examples
 ```
 
-## Dependencies
+## 🏗️ Project Structure
 
-- **.NET 9.0**: Latest .NET runtime
-- **JsonPath.Net**: JSONPath expression evaluation
-- **System.Text.Json**: Built-in JSON handling
+```
+Json.Transform/
+├── src/Json.Transform/           # Core library
+│   ├── Core/                     # Transformation engine
+│   ├── Models/                   # Data models
+│   ├── Extensions/               # Helper extensions
+│   └── Exceptions/               # Custom exceptions
+├── tests/Json.Transform.Tests/   # Unit tests (8 tests)
+├── benchmarks/                   # Performance benchmarks  
+├── examples/                     # Interactive examples + API
+├── BenchmarkDotNet.Artifacts/    # Generated benchmark reports
+└── Documentation files
+```
+
+## 📦 Dependencies
+
+- **.NET 9.0**: Latest .NET runtime for optimal performance
+- **JsonPath.Net** (1.0.5): JSONPath expression evaluation
+- **System.Text.Json**: Built-in high-performance JSON handling
+
+**Development Dependencies:**
+- **xUnit** (2.6.3): Unit testing framework
+- **FluentAssertions** (6.12.0): Readable test assertions  
+- **BenchmarkDotNet** (0.13.12): Performance benchmarking
+- **Swashbuckle.AspNetCore** (7.0.0): Swagger/OpenAPI support
 
 ## Contributing
 

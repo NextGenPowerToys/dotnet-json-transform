@@ -1,13 +1,202 @@
 using Json.Transform.Core;
 using Json.Transform.Models;
-using System.Text.Json;
+using Json.Transform.Examples.Api;
+using Json.Transform.Examples.Services;
+using Microsoft.OpenApi.Models;
 using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
 
 namespace Json.Transform.Examples;
 
 class Program
 {
     static async Task Main(string[] args)
+    {
+        // Check if running in API mode
+        if (args.Contains("--api") || args.Contains("-a"))
+        {
+            await RunApiMode(args);
+            return;
+        }
+
+        // Original console mode
+        await RunConsoleMode(args);
+    }
+
+    static async Task RunApiMode(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Add services
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "JSON Transform API",
+                Version = "v1",
+                Description = "API for testing JSON transformations using the Json.Transform library",
+                Contact = new OpenApiContact
+                {
+                    Name = "Json.Transform Library",
+                    Url = new Uri("https://github.com/yourusername/Json.Transform")
+                }
+            });
+
+            // Include XML comments if available
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+            if (File.Exists(xmlPath))
+            {
+                c.IncludeXmlComments(xmlPath);
+            }
+        });
+
+        builder.Services.AddScoped<TransformationService>();
+
+        // Configure CORS for development
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+            });
+        });
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline
+        // Enable Swagger in all environments for this demo API
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "JSON Transform API v1");
+            c.RoutePrefix = ""; // Serve Swagger UI at root
+            c.DocumentTitle = "JSON Transform API - Interactive Documentation";
+        });
+
+        app.UseCors();
+        app.UseHttpsRedirection();
+
+        // API Endpoints
+        ConfigureApiEndpoints(app);
+
+        var port = GetPortFromArgs(args) ?? 5000;
+        var url = $"http://localhost:{port}";
+
+        Console.WriteLine("🚀 JSON Transform API Server Starting...");
+        Console.WriteLine($"📡 API URL: {url}");
+        Console.WriteLine($"📖 Swagger UI: {url}");
+        Console.WriteLine("🔧 Use Ctrl+C to stop the server");
+        Console.WriteLine();
+
+        try
+        {
+            app.Run(url);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error starting server: {ex.Message}");
+        }
+    }
+
+    static void ConfigureApiEndpoints(WebApplication app)
+    {
+        // Transform endpoint
+        app.MapPost("/api/transform", async (TransformRequest request, TransformationService service) =>
+        {
+            if (string.IsNullOrWhiteSpace(request.SourceJson) || string.IsNullOrWhiteSpace(request.TemplateJson))
+            {
+                return Results.BadRequest(new { error = "Both sourceJson and templateJson are required" });
+            }
+
+            var result = await service.TransformAsync(request);
+            
+            if (result.Success)
+            {
+                return Results.Ok(result);
+            }
+            else
+            {
+                return Results.BadRequest(result);
+            }
+        })
+        .WithName("Transform")
+        .WithSummary("Transform JSON using a transformation template")
+        .WithDescription("Transforms source JSON data using the provided transformation template")
+        .WithOpenApi();
+
+        // Get examples endpoint
+        app.MapGet("/api/examples", (TransformationService service) =>
+        {
+            var examples = service.GetExampleScenarios();
+            return Results.Ok(examples);
+        })
+        .WithName("GetExamples")
+        .WithSummary("Get example transformation scenarios")
+        .WithDescription("Returns predefined example scenarios for testing different transformation capabilities")
+        .WithOpenApi();
+
+        // Health check endpoint
+        app.MapGet("/api/health", () =>
+        {
+            return Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow });
+        })
+        .WithName("HealthCheck")
+        .WithSummary("Health check endpoint")
+        .WithOpenApi();
+
+        // Transform with example endpoint
+        app.MapPost("/api/transform/example/{exampleName}", async (string exampleName, TransformationService service) =>
+        {
+            var examples = service.GetExampleScenarios();
+            var example = examples.FirstOrDefault(e => e.Name.Equals(exampleName, StringComparison.OrdinalIgnoreCase));
+            
+            if (example == null)
+            {
+                return Results.NotFound(new { error = $"Example '{exampleName}' not found" });
+            }
+
+            var request = new TransformRequest
+            {
+                SourceJson = example.SourceJson,
+                TemplateJson = example.TemplateJson
+            };
+
+            var result = await service.TransformAsync(request);
+            
+            return Results.Ok(new
+            {
+                example = example,
+                result = result
+            });
+        })
+        .WithName("TransformExample")
+        .WithSummary("Run a predefined example transformation")
+        .WithDescription("Executes one of the predefined example transformations by name")
+        .WithOpenApi();
+    }
+
+    static int? GetPortFromArgs(string[] args)
+    {
+        for (int i = 0; i < args.Length - 1; i++)
+        {
+            if (args[i] == "--port" || args[i] == "-p")
+            {
+                if (int.TryParse(args[i + 1], out int port))
+                {
+                    return port;
+                }
+            }
+        }
+        return null;
+    }
+
+    static async Task RunConsoleMode(string[] args)
     {
         Console.WriteLine("=== JSON Transform Library Examples ===\n");
 
@@ -49,7 +238,8 @@ class Program
         ComplexTransformationExample();
 
         Console.WriteLine("\n=== Examples Complete ===");
-        Console.WriteLine("\nTip: Use --demo to generate HTML demo, --tests to run tests first");
+        Console.WriteLine("\n💡 Tip: Run with --api to start the web API server for interactive testing!");
+        Console.WriteLine("💡 Tip: Use --demo to generate HTML demo, --tests to run tests first");
     }
 
     static async Task RunTests()

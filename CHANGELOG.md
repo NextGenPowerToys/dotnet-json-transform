@@ -7,14 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-07-15
+
 ### Added
-- Performance benchmarking project with BenchmarkDotNet
-- Comprehensive contributing guidelines
-- EditorConfig for consistent code formatting
-- Enhanced NuGet package metadata
+- 🌐 **Interactive Web API**: RESTful API with Swagger UI for testing transformations
+- 🎯 **API Endpoints**: 
+  - `POST /api/transform` - Transform JSON with custom templates
+  - `GET /api/examples` - Get predefined example scenarios
+  - `POST /api/transform/example/{name}` - Run specific examples
+  - `GET /api/health` - Health check endpoint
+- 🎬 **Enhanced Examples Project**: Consolidated demo/example structure with multiple execution modes
+- 📊 **Performance Benchmarks**: Complete benchmark suite with HTML reporting
+- 🧪 **Integrated Testing**: Built-in test runner with validation
+- 🎨 **Multiple Execution Modes**:
+  - Console examples (`dotnet run`)
+  - Web API server (`dotnet run -- --api`)
+  - HTML demo generation (`dotnet run -- --demo`)
+  - Test validation (`dotnet run -- --tests`)
+- 📈 **Benchmark Results**: Detailed performance metrics with memory usage analysis
+- 🔧 **API Testing Scripts**: Automated curl-based API validation
 
 ### Changed
-- Improved project structure and documentation
+- **Project Structure**: Consolidated examples into single project with API capabilities
+- **Documentation**: Updated README with interactive examples and API usage
+- **Demo Generation**: Moved from separate Demo folder to integrated examples project
+- **Performance**: Enhanced with detailed benchmarking and optimization
+
+### Performance Results
+- Math Operations: 4.4 μs (fastest)
+- Conditional Logic: 4.6 μs  
+- Simple Field Mapping: 62.7 μs
+- Large Data Aggregation: 119.2 μs
+- String Concatenation: 439.4 μs
+- Complex Transformation: 485.6 μs
+
+### Technical Improvements
+- **Web SDK Integration**: Examples project now supports both console and web applications
+- **Swagger Integration**: Full OpenAPI documentation with interactive testing
+- **CORS Support**: Configured for development and testing scenarios
+- **Error Handling**: Enhanced API error responses with detailed context
+- **HTML Generation**: Improved demo output with performance metrics
 
 ## [1.0.0] - 2025-07-14
 

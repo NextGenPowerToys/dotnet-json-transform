@@ -104,13 +104,52 @@ dotnet test --collect:"XPlat Code Coverage"
 
 # Run specific test project
 dotnet test tests/Json.Transform.Tests/
+
+# Quick validation via examples project
+cd examples
+dotnet run -- --tests
 ```
 
-## Performance
+### Testing the API
 
-### Benchmarking
+The examples project includes a REST API with Swagger UI for interactive testing:
 
-We use BenchmarkDotNet for performance testing. Run benchmarks with:
+```bash
+# Start the API server
+cd examples
+dotnet run -- --api --port 5001
+
+# Visit http://localhost:5001 for Swagger UI
+# Or use the automated test script
+./test-api.sh
+```
+
+**API Testing Checklist:**
+- [ ] All endpoints respond correctly
+- [ ] Swagger UI loads and displays documentation
+- [ ] Transform endpoint handles valid JSON
+- [ ] Error handling returns appropriate HTTP status codes
+- [ ] Example scenarios endpoint returns all predefined examples
+- [ ] Health check endpoint confirms server status
+
+### Testing Interactive Examples
+
+```bash
+cd examples
+
+# Test console examples
+dotnet run
+
+# Test HTML demo generation
+dotnet run -- --demo --no-browser
+
+# Test combined functionality
+dotnet run -- --tests --demo --no-browser
+```
+
+### Performance Testing
+
+Run benchmarks to ensure performance standards:
 
 ```bash
 cd benchmarks/Json.Transform.Benchmarks
