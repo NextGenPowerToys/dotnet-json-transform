@@ -270,7 +270,7 @@ The project uses the following key dependencies:
 
 ```bash
 # Clone your fork
-git clone https://github.com/your-username/Json.Transform.git
+git clone https://github.com/NextGenPowerToys/Json.Transform.git
 cd Json.Transform
 
 # Restore packages

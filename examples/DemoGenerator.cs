@@ -466,7 +466,7 @@ public class DemoGenerator
 
         html.AppendLine("        <div class=\"footer\">");
         html.AppendLine("            <p>🎯 All transformations executed successfully with real-time results!</p>");
-        html.AppendLine("            <a href=\"https://github.com/yourusername/Json.Transform\" class=\"github-link\">View on GitHub</a>");
+        html.AppendLine("            <a href=\"https://github.com/NextGenPowerToys/Json.Transform\" class=\"github-link\">View on GitHub</a>");
         html.AppendLine("        </div>");
         html.AppendLine("    </div>");
 

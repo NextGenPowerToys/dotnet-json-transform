@@ -12,18 +12,18 @@
     <!-- Package Information -->
     <PackageId>Json.Transform</PackageId>
     <PackageVersion>1.0.0</PackageVersion>
-    <Authors>Json.Transform Contributors</Authors>
-    <Company>Json.Transform</Company>
+    <Authors>NextGenPowerToys</Authors>
+    <Company>NextGenPowerToys</Company>
     <Product>Json.Transform</Product>
     <Description>A powerful .NET JSON transformation engine that maps source JSON data to target JSON structures using configurable transformation templates. Supports field mapping, aggregation, conditional logic, mathematical operations, string concatenation, constants, and nested transformations.</Description>
     <PackageTags>json;transformation;mapping;templating;jsonpath;data-transformation;json-processing;conditional-logic;aggregation;math-operations</PackageTags>
-    <PackageProjectUrl>https://github.com/your-org/Json.Transform</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/your-org/Json.Transform</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/NextGenPowerToys/Json.Transform</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/NextGenPowerToys/Json.Transform</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>Initial release of Json.Transform library with comprehensive JSON transformation capabilities.</PackageReleaseNotes>
-    <Copyright>Copyright (c) 2025 Json.Transform Contributors</Copyright>
+    <Copyright>Copyright (c) 2025 NextGenPowerToys</Copyright>
     
     <!-- Code Analysis and Quality -->
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>

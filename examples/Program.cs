@@ -41,7 +41,7 @@ class Program
                 Contact = new OpenApiContact
                 {
                     Name = "Json.Transform Library",
-                    Url = new Uri("https://github.com/yourusername/Json.Transform")
+                    Url = new Uri("https://github.com/NextGenPowerToys/Json.Transform")
                 }
             });
 

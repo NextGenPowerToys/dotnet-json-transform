@@ -428,7 +428,7 @@ The playground uses the standard Json.Transform template format:
 
 ```bash
 # Clone and setup
-git clone https://github.com/yourusername/Json.Transform.git
+git clone https://github.com/NextGenPowerToys/Json.Transform.git
 cd Json.Transform
 dotnet restore
 

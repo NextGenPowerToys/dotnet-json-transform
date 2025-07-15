@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- 🏢 **Repository Ownership**: Transferred repository ownership to NextGenPowerToys organization
+  - Updated all GitHub repository URLs and references
+  - Updated package author and company information
+  - Updated copyright notices in LICENSE file
+
 ### Added
 - 🎮 **Interactive Playground**: Modern web-based playground for testing transformations
   - Dual-pane editor with syntax highlighting for JSON and templates
