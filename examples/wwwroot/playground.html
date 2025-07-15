@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Transform Playground</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --bg-dark: #1a1a1a;
+            --bg-light: #2d2d2d;
+            --text-light: #f8f9fa;
+            --text-muted: #9ca3af;
+            --border-color: #374151;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--text-light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #e0e7ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .playground {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr auto;
+            gap: 20px;
+            height: calc(100vh - 200px);
+        }
+
+        .controls {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .example-selector {
+            flex: 1;
+        }
+
+        .example-selector select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-light);
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: #374151;
+        }
+
+        .editor-panel {
+            background: var(--bg-dark);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-header {
+            background: var(--bg-light);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .editor-content {
+            flex: 1;
+            position: relative;
+        }
+
+        .editor {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            border: none;
+            padding: 20px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+        }
+
+        .output-panel {
+            grid-column: 1 / -1;
+            background: var(--bg-dark);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            max-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .output-header {
+            background: var(--bg-light);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .output-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .output-json {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .status-success {
+            color: var(--success-color);
+        }
+
+        .status-error {
+            color: var(--error-color);
+        }
+
+        .status-loading {
+            color: var(--warning-color);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            border-radius: 8px;
+            padding: 15px;
+            color: var(--error-color);
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .playground {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn-group {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Syntax highlighting overrides */
+        .token.string {
+            color: #98d982;
+        }
+
+        .token.number {
+            color: #ffb86c;
+        }
+
+        .token.boolean {
+            color: #ff79c6;
+        }
+
+        .token.null {
+            color: #8be9fd;
+        }
+
+        .token.property {
+            color: #f8f8f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🎮 JSON Transform Playground</h1>
+            <p class="subtitle">Interactive JSON transformation editor - Edit, transform, and see results in real-time</p>
+        </div>
+
+        <div class="playground">
+            <div class="controls">
+                <div class="example-selector">
+                    <label for="exampleSelect" style="display: block; margin-bottom: 5px; font-weight: 500;">Load Example:</label>
+                    <select id="exampleSelect">
+                        <option value="">-- Select an example --</option>
+                        <option value="field-mapping">Field Mapping</option>
+                        <option value="conditional-logic">Conditional Logic</option>
+                        <option value="string-concatenation">String Concatenation</option>
+                        <option value="aggregation">Aggregation Operations</option>
+                        <option value="math-operations">Math Operations</option>
+                        <option value="complex-transformation">Complex Transformation</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+                    <button class="btn btn-secondary" onclick="formatJson()">Format JSON</button>
+                    <button class="btn btn-primary" onclick="runTransformation()">🚀 Transform</button>
+                </div>
+            </div>
+
+            <div class="editor-panel">
+                <div class="editor-header">
+                    <span>📝 Source JSON</span>
+                </div>
+                <div class="editor-content">
+                    <textarea 
+                        id="sourceJson" 
+                        class="editor" 
+                        placeholder="Enter your source JSON here..."
+                        spellcheck="false"
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="editor-panel">
+                <div class="editor-header">
+                    <span>⚙️ Transform Template</span>
+                </div>
+                <div class="editor-content">
+                    <textarea 
+                        id="transformTemplate" 
+                        class="editor" 
+                        placeholder="Enter your transformation template here..."
+                        spellcheck="false"
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="output-panel">
+                <div class="output-header">
+                    <span>✨ Transformation Result</span>
+                    <div class="status-indicator" id="statusIndicator">
+                        <span>Ready</span>
+                    </div>
+                </div>
+                <div class="output-content">
+                    <div id="outputContent">
+                        <p style="color: var(--text-muted); text-align: center; padding: 40px;">
+                            🎯 Enter source JSON and transform template above, then click "Transform" to see the magic happen!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        
+        // Example templates
+        const examples = {
+            'field-mapping': {
+                sourceJson: {
+                    "user": {
+                        "name": "John Doe",
+                        "age": 25,
+                        "email": "john@example.com"
+                    }
+                },
+                transformTemplate: {
+                    "mappings": [
+                        {
+                            "from": "$.user.name",
+                            "to": "$.customer.fullName"
+                        },
+                        {
+                            "from": "$.user.email",
+                            "to": "$.customer.contact.email"
+                        }
+                    ]
+                }
+            },
+            'conditional-logic': {
+                sourceJson: {
+                    "user": {
+                        "name": "Alice Smith",
+                        "age": 17,
+                        "country": "US"
+                    }
+                },
+                transformTemplate: {
+                    "mappings": [
+                        {
+                            "from": "$.user.name",
+                            "to": "$.result.name"
+                        },
+                        {
+                            "from": "$.user.age",
+                            "to": "$.result.status",
+                            "conditions": [
+                                {
+                                    "if": "$.user.age >= 18",
+                                    "then": "Adult",
+                                    "else": "Minor"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            'string-concatenation': {
+                sourceJson: {
+                    "user": {
+                        "firstName": "Bob",
+                        "lastName": "Johnson",
+                        "title": "Mr."
+                    }
+                },
+                transformTemplate: {
+                    "mappings": [
+                        {
+                            "to": "$.user.displayName",
+                            "concat": "{$.user.title} {$.user.firstName} {$.user.lastName}"
+                        }
+                    ]
+                }
+            },
+            'aggregation': {
+                sourceJson: {
+                    "orders": [
+                        { "id": 1, "amount": 100.50 },
+                        { "id": 2, "amount": 75.25 },
+                        { "id": 3, "amount": 200.00 }
+                    ]
+                },
+                transformTemplate: {
+                    "mappings": [
+                        {
+                            "from": "$.orders[*].amount",
+                            "to": "$.summary.totalAmount",
+                            "aggregate": "sum"
+                        },
+                        {
+                            "from": "$.orders",
+                            "to": "$.summary.orderCount",
+                            "aggregate": "count"
+                        },
+                        {
+                            "from": "$.orders[*].amount",
+                            "to": "$.summary.averageAmount",
+                            "aggregate": "avg"
+                        }
+                    ]
+                }
+            },
+            'math-operations': {
+                sourceJson: {
+                    "product": {
+                        "price": 100.00,
+                        "taxRate": 0.08,
+                        "discount": 10.00
+                    }
+                },
+                transformTemplate: {
+                    "mappings": [
+                        {
+                            "to": "$.result.subtotal",
+                            "math": {
+                                "operation": "subtract",
+                                "operands": ["$.product.price", "$.product.discount"]
+                            }
+                        },
+                        {
+                            "to": "$.result.tax",
+                            "math": {
+                                "operation": "multiply",
+                                "operands": ["$.result.subtotal", "$.product.taxRate"]
+                            }
+                        }
+                    ]
+                }
+            },
+            'complex-transformation': {
+                sourceJson: {
+                    "customer": {
+                        "name": "Emma Wilson",
+                        "age": 28,
+                        "email": "emma@example.com"
+                    },
+                    "orders": [
+                        { "id": 1, "total": 150.75, "status": "completed" },
+                        { "id": 2, "total": 89.99, "status": "pending" }
+                    ],
+                    "preferences": {
+                        "currency": "USD",
+                        "notifications": true
+                    }
+                },
+                transformTemplate: {
+                    "mappings": [
+                        {
+                            "from": "$.customer.name",
+                            "to": "$.profile.displayName"
+                        },
+                        {
+                            "from": "$.customer.email",
+                            "to": "$.profile.contact.email"
+                        },
+                        {
+                            "from": "$.customer.age",
+                            "to": "$.profile.ageGroup",
+                            "conditions": [
+                                {
+                                    "if": "$.customer.age >= 18",
+                                    "then": "Adult",
+                                    "else": "Minor"
+                                }
+                            ]
+                        },
+                        {
+                            "from": "$.orders[*].total",
+                            "to": "$.orderSummary.totalSpent",
+                            "aggregate": "sum"
+                        },
+                        {
+                            "from": "$.orders",
+                            "to": "$.orderSummary.orderCount",
+                            "aggregate": "count"
+                        },
+                        {
+                            "to": "$.metadata.generatedAt",
+                            "value": "now"
+                        },
+                        {
+                            "to": "$.metadata.version",
+                            "value": "1.0"
+                        }
+                    ]
+                }
+            }
+        };
+
+        // Load example when selected
+        document.getElementById('exampleSelect').addEventListener('change', function(e) {
+            const exampleKey = e.target.value;
+            if (exampleKey && examples[exampleKey]) {
+                const example = examples[exampleKey];
+                document.getElementById('sourceJson').value = JSON.stringify(example.sourceJson, null, 2);
+                document.getElementById('transformTemplate').value = JSON.stringify(example.transformTemplate, null, 2);
+                updateStatus('Example loaded', 'success');
+            }
+        });
+
+        // Clear all inputs
+        function clearAll() {
+            document.getElementById('sourceJson').value = '';
+            document.getElementById('transformTemplate').value = '';
+            document.getElementById('outputContent').innerHTML = `
+                <p style="color: var(--text-muted); text-align: center; padding: 40px;">
+                    🎯 Enter source JSON and transform template above, then click "Transform" to see the magic happen!
+                </p>
+            `;
+            document.getElementById('exampleSelect').value = '';
+            updateStatus('Cleared', 'success');
+        }
+
+        // Format JSON
+        function formatJson() {
+            try {
+                const sourceJson = document.getElementById('sourceJson').value.trim();
+                const transformTemplate = document.getElementById('transformTemplate').value.trim();
+                
+                if (sourceJson) {
+                    const parsed = JSON.parse(sourceJson);
+                    document.getElementById('sourceJson').value = JSON.stringify(parsed, null, 2);
+                }
+                
+                if (transformTemplate) {
+                    const parsed = JSON.parse(transformTemplate);
+                    document.getElementById('transformTemplate').value = JSON.stringify(parsed, null, 2);
+                }
+                
+                updateStatus('JSON formatted', 'success');
+            } catch (error) {
+                updateStatus('Invalid JSON format', 'error');
+            }
+        }
+
+        // Run transformation
+        async function runTransformation() {
+            const sourceJson = document.getElementById('sourceJson').value.trim();
+            const transformTemplate = document.getElementById('transformTemplate').value.trim();
+            
+            if (!sourceJson || !transformTemplate) {
+                updateStatus('Please provide both source JSON and transform template', 'error');
+                return;
+            }
+
+            updateStatus('Transforming...', 'loading');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/transform`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        sourceJson: sourceJson,
+                        templateJson: transformTemplate
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayResult(result.resultJson);
+                    updateStatus('Transformation completed', 'success');
+                } else {
+                    displayError(result.error || 'Unknown error occurred');
+                    updateStatus('Transformation failed', 'error');
+                }
+                
+            } catch (error) {
+                displayError(error.message);
+                updateStatus('Transformation failed', 'error');
+            }
+        }
+
+        // Display successful result
+        function displayResult(result) {
+            if (!result) {
+                displayError('No result returned from transformation');
+                return;
+            }
+            
+            try {
+                // If result is already a string, try to parse it to validate and format
+                let parsedResult;
+                if (typeof result === 'string') {
+                    parsedResult = JSON.parse(result);
+                } else {
+                    parsedResult = result;
+                }
+                
+                const formattedResult = JSON.stringify(parsedResult, null, 2);
+                document.getElementById('outputContent').innerHTML = `
+                    <pre class="output-json"><code class="language-json">${escapeHtml(formattedResult)}</code></pre>
+                `;
+                // Re-highlight syntax
+                Prism.highlightAll();
+            } catch (parseError) {
+                displayError(`Failed to parse result JSON: ${parseError.message}\nRaw result: ${result}`);
+            }
+        }
+
+        // Display error
+        function displayError(error) {
+            document.getElementById('outputContent').innerHTML = `
+                <div class="error-message">${escapeHtml(error)}</div>
+            `;
+        }
+
+        // Update status indicator
+        function updateStatus(message, type) {
+            const indicator = document.getElementById('statusIndicator');
+            let icon = '';
+            let className = '';
+            
+            switch (type) {
+                case 'success':
+                    icon = '✅';
+                    className = 'status-success';
+                    break;
+                case 'error':
+                    icon = '❌';
+                    className = 'status-error';
+                    break;
+                case 'loading':
+                    icon = '<div class="loading-spinner"></div>';
+                    className = 'status-loading';
+                    break;
+                default:
+                    icon = '⭕';
+                    className = '';
+            }
+            
+            indicator.innerHTML = `${icon} <span>${message}</span>`;
+            indicator.className = `status-indicator ${className}`;
+        }
+
+        // Escape HTML for safe display
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Auto-resize textareas
+        function autoResize(element) {
+            element.style.height = 'auto';
+            element.style.height = element.scrollHeight + 'px';
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        runTransformation();
+                        break;
+                    case 'l':
+                        e.preventDefault();
+                        clearAll();
+                        break;
+                }
+            }
+        });
+
+        // Initialize
+        updateStatus('Ready - Load an example or enter your own JSON', 'success');
+    </script>
+</body>
+</html>

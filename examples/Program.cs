@@ -48,7 +48,7 @@ class Program
             // Include XML comments if available
             var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
-            if (File.Exists(xmlPath))
+            if (System.IO.File.Exists(xmlPath))
             {
                 c.IncludeXmlComments(xmlPath);
             }
@@ -70,6 +70,9 @@ class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline
+        // Enable static files
+        app.UseStaticFiles();
+        
         // Enable Swagger in all environments for this demo API
         app.UseSwagger();
         app.UseSwaggerUI(c =>
@@ -91,6 +94,7 @@ class Program
         Console.WriteLine("🚀 JSON Transform API Server Starting...");
         Console.WriteLine($"📡 API URL: {url}");
         Console.WriteLine($"📖 Swagger UI: {url}");
+        Console.WriteLine($"🎮 Interactive Playground: {url}/playground");
         Console.WriteLine("🔧 Use Ctrl+C to stop the server");
         Console.WriteLine();
 
@@ -178,6 +182,24 @@ class Program
         .WithName("TransformExample")
         .WithSummary("Run a predefined example transformation")
         .WithDescription("Executes one of the predefined example transformations by name")
+        .WithOpenApi();
+
+        // Playground endpoint - serves the interactive playground HTML page
+        app.MapGet("/playground", async (HttpContext context) =>
+        {
+            var playgroundPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "playground.html");
+            
+            if (!System.IO.File.Exists(playgroundPath))
+            {
+                return Results.NotFound("Playground page not found");
+            }
+
+            var htmlContent = await System.IO.File.ReadAllTextAsync(playgroundPath);
+            return Results.Content(htmlContent, "text/html");
+        })
+        .WithName("Playground")
+        .WithSummary("Interactive JSON Transform Playground")
+        .WithDescription("Opens an interactive web page for testing JSON transformations")
         .WithOpenApi();
     }
 
