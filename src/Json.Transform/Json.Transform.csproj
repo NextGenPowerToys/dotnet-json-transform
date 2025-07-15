@@ -11,7 +11,7 @@
     
     <!-- Package Information -->
     <PackageId>NextGenPowerToys.Json.Transform</PackageId>
-    <PackageVersion>1.0.0-alpha</PackageVersion>
+    <PackageVersion>1.0.0-alpha.3</PackageVersion>
     <Authors>NextGenPowerToys</Authors>
     <Company>NextGenPowerToys</Company>
     <Product>Json.Transform</Product>
@@ -22,7 +22,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>⚠️ ALPHA RELEASE - TESTING ONLY ⚠️ Initial alpha release of NextGenPowerToys.Json.Transform library with comprehensive JSON transformation capabilities. This is an experimental version for testing and feedback purposes. Not recommended for production use.</PackageReleaseNotes>
+    <PackageReleaseNotes>⚠️ ALPHA RELEASE - TESTING ONLY ⚠️ Alpha release with package README included. This version includes complete documentation in the NuGet package. This is an experimental version for testing and feedback purposes. Not recommended for production use.</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Copyright>Copyright (c) 2025 NextGenPowerToys</Copyright>
     
     <!-- Code Analysis and Quality -->
@@ -42,6 +43,10 @@
 
   <ItemGroup>
     <PackageReference Include="JsonPath.Net" Version="1.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
