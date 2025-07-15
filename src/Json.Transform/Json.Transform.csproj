@@ -10,19 +10,19 @@
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     
     <!-- Package Information -->
-    <PackageId>Json.Transform</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageId>NextGenPowerToys.Json.Transform</PackageId>
+    <PackageVersion>1.0.0-alpha</PackageVersion>
     <Authors>NextGenPowerToys</Authors>
     <Company>NextGenPowerToys</Company>
     <Product>Json.Transform</Product>
-    <Description>A powerful .NET JSON transformation engine that maps source JSON data to target JSON structures using configurable transformation templates. Supports field mapping, aggregation, conditional logic, mathematical operations, string concatenation, constants, and nested transformations.</Description>
+    <Description>⚠️ ALPHA VERSION - FOR TESTING PURPOSES ONLY ⚠️ A powerful .NET JSON transformation engine that maps source JSON data to target JSON structures using configurable transformation templates. Supports field mapping, aggregation, conditional logic, mathematical operations, string concatenation, constants, and nested transformations. This is an experimental alpha release - use at your own risk.</Description>
     <PackageTags>json;transformation;mapping;templating;jsonpath;data-transformation;json-processing;conditional-logic;aggregation;math-operations</PackageTags>
     <PackageProjectUrl>https://github.com/NextGenPowerToys/dotnet-json-transform</PackageProjectUrl>
     <RepositoryUrl>https://github.com/NextGenPowerToys/dotnet-json-transform</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Initial release of Json.Transform library with comprehensive JSON transformation capabilities.</PackageReleaseNotes>
+    <PackageReleaseNotes>⚠️ ALPHA RELEASE - TESTING ONLY ⚠️ Initial alpha release of NextGenPowerToys.Json.Transform library with comprehensive JSON transformation capabilities. This is an experimental version for testing and feedback purposes. Not recommended for production use.</PackageReleaseNotes>
     <Copyright>Copyright (c) 2025 NextGenPowerToys</Copyright>
     
     <!-- Code Analysis and Quality -->
