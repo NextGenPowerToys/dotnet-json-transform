@@ -3,6 +3,11 @@
 # Generate and open dynamic JSON Transform Library Demo
 echo "🎬 JSON Transform Library Demo Generator"
 echo "========================================"
+echo ""
+echo "💡 Pro Tip: For interactive testing, try the playground:"
+echo "   👉 Start API: dotnet run --project examples/"
+echo "   👉 Visit: http://localhost:5000/playground"
+echo ""
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

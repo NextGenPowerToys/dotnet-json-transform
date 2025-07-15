@@ -5,6 +5,9 @@ API_URL="http://localhost:5001"
 
 echo "🧪 Testing JSON Transform API..."
 echo ""
+echo "💡 Pro Tip: For visual testing, visit the playground:"
+echo "   👉 http://localhost:5001/playground"
+echo ""
 
 # Test health endpoint
 echo "1. Testing health endpoint..."

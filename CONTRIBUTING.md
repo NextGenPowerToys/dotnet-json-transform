@@ -68,6 +68,22 @@ We use EditorConfig to maintain consistent coding styles. Make sure your editor 
 
 ## Testing
 
+### Interactive Playground
+
+The project includes an interactive playground for testing transformations:
+
+```bash
+cd examples
+dotnet run -- --api
+# Visit http://localhost:5000/playground
+```
+
+Use the playground to:
+- Test new transformation features
+- Validate examples before adding them to the codebase
+- Demonstrate functionality to other contributors
+- Debug transformation issues interactively
+
 ### Unit Tests
 
 - Write unit tests for all new functionality
@@ -139,6 +155,10 @@ cd examples
 
 # Test console examples
 dotnet run
+
+# Test interactive API and playground
+dotnet run -- --api
+# Visit http://localhost:5000/playground
 
 # Test HTML demo generation
 dotnet run -- --demo --no-browser

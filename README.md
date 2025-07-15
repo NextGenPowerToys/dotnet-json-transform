@@ -6,28 +6,35 @@ A powerful .NET JSON transformation engine that maps source JSON data to target 
 
 ### Multiple Ways to Experience Json.Transform
 
-#### 1. 🌐 **Interactive Web API** (Recommended)
+#### 1. � **Interactive Playground** (Recommended)
+```bash
+cd examples
+dotnet run -- --api --port 5260
+# Visit http://localhost:5260/playground for the interactive editor
+```
+
+#### 2. 🌐 **REST API & Swagger**
 ```bash
 cd examples
 dotnet run -- --api
-# Visit http://localhost:5000 for Swagger UI
+# Visit http://localhost:5000 for Swagger UI and API documentation
 ```
 
-#### 2. 🎬 **Live Console Demo**
+#### 3. 🎬 **Live Console Demo**
 ```bash
 cd examples
 dotnet run -- --demo    # Generate and open HTML demo
 dotnet run              # Run console examples
 ```
 
-#### 3. 🧪 **Run Tests & Benchmarks**
+#### 4. 🧪 **Run Tests & Benchmarks**
 ```bash
 dotnet test                                    # Run all tests
 dotnet run --project benchmarks --configuration Release  # Performance benchmarks
 cd examples && dotnet run -- --tests          # Quick test validation
 ```
 
-## Features
+## ✨ Features
 
 🔄 **Field Mapping**: Copy/move fields between JSON structures  
 📊 **Aggregation**: Sum, average, min, max operations on arrays  
@@ -36,8 +43,11 @@ cd examples && dotnet run -- --tests          # Quick test validation
 🔗 **String Concatenation**: Combine multiple fields with templates  
 📝 **Constants**: Inject static values (timestamps, GUIDs, etc.)  
 🏗️ **Nested Transformations**: Deep object structure mapping  
-🌐 **REST API**: Interactive Swagger UI for testing transformations  
-## Installation
+🎮 **Interactive Playground**: Live web-based transformation editor  
+🌐 **REST API**: Complete Swagger UI for testing transformations  
+⚡ **High Performance**: Built on System.Text.Json for speed  
+
+## 📦 Installation
 
 ```bash
 dotnet add package Json.Transform
@@ -341,6 +351,78 @@ The library includes 6 comprehensive transformation scenarios:
 4. **Math Operations** - Arithmetic calculations with mixed operands
 5. **String Concatenation** - Template-based string building
 6. **Complex Transformation** - Multi-step nested transformations
+
+## 🎮 Interactive Playground
+
+The **JSON Transform Playground** provides a modern, web-based interface for real-time JSON transformation testing and experimentation.
+
+### 🚀 Getting Started
+
+```bash
+cd examples
+dotnet run -- --api --port 5260
+# Open browser to: http://localhost:5260/playground
+```
+
+### ✨ Playground Features
+
+- **🎨 Modern UI**: Clean, professional interface with blue-gray color scheme
+- **📝 Dual Editors**: Side-by-side JSON source and transform template editors
+- **⚡ Real-time Transformation**: Instant results as you type
+- **📚 Example Library**: Pre-loaded examples for common transformation patterns
+- **🔧 Interactive Controls**: Format JSON, clear editors, copy results
+- **📱 Responsive Design**: Works seamlessly on desktop, tablet, and mobile
+- **🎯 Syntax Highlighting**: JSON syntax highlighting for better readability
+- **⚠️ Error Handling**: Clear error messages and validation feedback
+
+### 🎭 Example Scenarios Available
+
+1. **Simple Field Mapping**: Basic property copying and renaming
+2. **Conditional Logic**: Age-based status assignment with if/else conditions
+3. **String Concatenation**: Combining multiple fields with templates
+4. **Aggregation Operations**: Sum, count, and average calculations
+5. **Mathematical Operations**: Arithmetic on numeric fields
+6. **Complex Transformations**: Multi-level mapping with all features combined
+
+### 🔄 How to Use the Playground
+
+1. **Load an Example**: Click any example button to load sample data
+2. **Edit Source JSON**: Modify the left editor with your input data
+3. **Edit Transform Template**: Update the right editor with transformation rules
+4. **Transform**: Click "🚀 Transform" to see results instantly
+5. **Copy Results**: Use the copy button to get the transformed JSON
+
+### 🎨 Playground Interface
+
+- **Header**: Compact title and description
+- **Control Bar**: Example buttons, format, clear, and transform controls
+- **Editor Panels**: Source JSON (left) and Transform Template (right)
+- **Output Panel**: Transformation results with success/error indicators
+- **Status Indicators**: Visual feedback for transformation state
+
+### 📖 Transform Template Format
+
+The playground uses the standard Json.Transform template format:
+
+```json
+{
+  "mappings": [
+    {
+      "from": "$.source.path",
+      "to": "$.target.path"
+    },
+    {
+      "to": "$.target.computed",
+      "value": "constant value"
+    },
+    {
+      "from": "$.array[*].value",
+      "to": "$.summary.total",
+      "aggregate": "sum"
+    }
+  ]
+}
+```
 
 ## 🛠️ Building and Testing
 
