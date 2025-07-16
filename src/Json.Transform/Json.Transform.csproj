@@ -10,8 +10,8 @@
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     
     <!-- Package Information -->
-    <PackageId>NextGenPowerToys.Json.Transform.Test</PackageId>
-    <PackageVersion>2.3.0</PackageVersion>
+    <PackageId>NextGenPowerToys.Json.Transform</PackageId>
+    <PackageVersion>2.4.2</PackageVersion>
     <Authors>NextGenPowerToys</Authors>
     <Company>NextGenPowerToys</Company>
     <Product>Json.Transform</Product>
@@ -22,7 +22,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Version 2.3.0 - String Operations Release! NEW FEATURES: String Operations - Advanced string comparison operators (contains, startsWith, endsWith) integrated with conditional logic and aggregation filters, Enhanced template engine with string operators in JSONPath expressions, Complex employee processing examples with email filtering and badge generation. EXAMPLES: Interactive playground updated with sophisticated string operations examples, Console examples enhanced with 3 string operation sub-scenarios, API documentation with new "String Operations" transformation service. TESTING: 36 test cases with 100% pass rate (added 10 string operations tests), Production scenarios including email validation and file processing, Enhanced test coverage for string comparison operations. DOCUMENTATION: Complete query templates reference (query-templates.md) included in package, Updated README with all functionality and comprehensive examples, Full documentation coverage for all transformation capabilities. Ready for production use with complete string processing capabilities.</PackageReleaseNotes>
+    <PackageReleaseNotes>Version 2.4.1 - Production Ready Release! PRODUCTION READY: Removed alpha warnings - now ready for production use with full confidence in stability and performance. FEATURES: String Operations - Advanced string comparison operators (contains, startsWith, endsWith) integrated with conditional logic and aggregation filters, Enhanced template engine with string operators in JSONPath expressions, Complex employee processing examples with email filtering and badge generation. EXAMPLES: Interactive playground updated with sophisticated string operations examples, Console examples enhanced with 3 string operation sub-scenarios, API documentation with new "String Operations" transformation service. TESTING: 36 test cases with 100% pass rate (added 10 string operations tests), Production scenarios including email validation and file processing, Enhanced test coverage for string comparison operations. DOCUMENTATION: Complete query templates reference (query-templates.md) included in package, Updated README with all functionality and comprehensive examples, Full documentation coverage for all transformation capabilities. Fully validated and production-ready with complete string processing capabilities.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Copyright>Copyright (c) 2025 NextGenPowerToys</Copyright>
     

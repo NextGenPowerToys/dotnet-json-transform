@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    
+    <!-- Package Information -->
+    <PackageId>NextGenPowerToys.JSQL</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>NextGenPowerToys</Authors>
+    <Company>NextGenPowerToys</Company>
+    <Product>JSQL</Product>
+    <Description>SQL-to-JSON transformation analyzer that takes JSON examples and SQL queries to generate NextGenPowerToys.Json.Transform templates. Analyzes compatibility, validates field mappings, and provides detailed error reporting when transformations are not possible.</Description>
+    <PackageTags>sql;json;transformation;analyzer;template-generator;json-transform;sql-parser;compatibility-analyzer</PackageTags>
+    <PackageProjectUrl>https://github.com/NextGenPowerToys/dotnet-jsql</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/NextGenPowerToys/dotnet-jsql</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Version 1.0.0 - Initial release of SQL-to-JSON transformation analyzer with full compatibility validation and template generation.</PackageReleaseNotes>
+    <Copyright>Copyright (c) 2025 NextGenPowerToys</Copyright>
+    
+    <!-- Code Analysis and Quality -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
+    <PackageReference Include="JsonPath.Net" Version="1.0.5" />
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Json.Transform/Json.Transform.csproj" />
+  </ItemGroup>
+
+</Project>
