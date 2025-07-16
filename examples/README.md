@@ -64,22 +64,27 @@ curl -X POST "http://localhost:5000/api/transform/example/Field%20Mapping"
 
 ## 📊 Example Scenarios
 
-The library includes 6 comprehensive transformation scenarios:
+The library includes 9 comprehensive transformation scenarios:
 
 1. **Field Mapping** - Basic field copying and restructuring
 2. **Conditional Logic** - Age-based categorization with if/else conditions  
-3. **Aggregation** - Sum, average, count operations on arrays
-4. **Math Operations** - Arithmetic calculations with mixed operands
-5. **String Concatenation** - Template-based string building
-6. **Complex Transformation** - Multi-step nested transformations
+3. **Multi-Condition Logic** - Complex boolean expressions with AND/OR operators
+4. **Aggregation** - Sum, average, count operations on arrays
+5. **Conditional Aggregation - Simple** - Filter arrays before aggregation with basic conditions
+6. **Conditional Aggregation - Complex** - Multi-condition array filtering before aggregation
+7. **Math Operations** - Arithmetic calculations with mixed operands
+8. **String Operations** - Template concatenation and comparison operators (contains, startsWith, endsWith)
+9. **Complex Transformation** - Multi-step nested transformations
 
 ## ✨ Features Demonstrated
 
 - ✅ **Field Mapping**: Copy/move fields between JSON structures
 - ✅ **Aggregation**: Sum, average, count operations on arrays
+- ✅ **Conditional Aggregation**: Filter arrays before aggregation with complex boolean conditions
 - ✅ **Conditional Logic**: If/else conditions with comparison operators
+- ✅ **Multi-Condition Logic**: Complex boolean expressions with AND/OR operators
 - ✅ **Math Operations**: Arithmetic calculations with dynamic operands
-- ✅ **String Concatenation**: Template-based string building
+- ✅ **String Operations**: Template concatenation and string comparison operators (contains, startsWith, endsWith)
 - ✅ **Constants**: Static value injection (timestamps, versions, etc.)
 - ✅ **Nested Transformations**: Deep object structure mapping
 - ✅ **REST API**: Interactive Swagger UI for testing transformations
@@ -91,7 +96,7 @@ The project generates an interactive HTML demo page with:
 - **Live Results**: Real transformation outputs with actual data
 - **Performance Metrics**: Execution times and success rates
 - **Syntax Highlighting**: Beautiful JSON formatting
-- **Interactive Examples**: All 6 transformation scenarios
+- **Interactive Examples**: All 9 transformation scenarios
 - **Error Handling**: Demonstrations of validation and error cases
 
 Perfect for presentations, documentation, and showcasing library capabilities.

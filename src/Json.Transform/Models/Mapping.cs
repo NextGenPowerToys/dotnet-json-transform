@@ -32,6 +32,12 @@ public class Mapping
     public string? Aggregate { get; set; }
 
     /// <summary>
+    /// Advanced aggregation rule with conditions
+    /// </summary>
+    [JsonPropertyName("aggregation")]
+    public AggregationRule? Aggregation { get; set; }
+
+    /// <summary>
     /// Mathematical operation to perform
     /// </summary>
     [JsonPropertyName("math")]

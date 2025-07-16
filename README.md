@@ -4,10 +4,19 @@ A high-performance .NET JSON transformation engine that maps source JSON data to
 
 ## 🏆 Key Highlights
 
-✅ **23 Tests Passing** - Comprehensive test coverage including complex multi-condition scenarios  
+✅ **36 Tests Passing** - Comprehensive test coverage including string operations and conditional aggregation scenarios  
 ⚡ **High Performance** - Complex transformations in under 40μs with minimal memory allocation  
-🎯 **Advanced Conditional Logic** - Support for AND/OR operators and nested conditions  
-� **Production Ready** - Battle-tested with extensive benchmarks and validation  
+🎯 **Advanced Conditional Logic** - Support for AND/OR operators and ### 🧪 Comprehensive Testing
+
+### 🎯 Test Coverage Summary
+- **✅ 36 Tests Passing** with 0 failures
+- **📊 Complex Multi-Condition Scenarios** with AND/OR operators
+- **📊 Conditional Aggregation Tests** with array filtering scenarios
+- **⚡ Performance Benchmarks** across all operation types
+- **🔧 Integration Tests** with real-world scenarios
+- **📈 HTML Test Reports** with detailed execution analysisonditions  
+📊 **Conditional Aggregation** - Filter arrays before aggregation with complex boolean expressions  
+🚀 **Production Ready** - Battle-tested with extensive benchmarks and validation  
 
 ## �🚀 Quick Start
 
@@ -46,14 +55,15 @@ cd examples && dotnet run -- --tests                        # Quick test validat
 🔄 **Field Mapping**: Copy/move fields between JSON structures  
 📊 **Aggregation**: Sum, average, min, max, count operations on arrays  
 🎯 **Advanced Conditional Logic**: Complex if/else with AND/OR operators  
+📊 **Conditional Aggregation**: Filter arrays before aggregation with complex boolean conditions  
 🧮 **Math Operations**: Arithmetic operations (+, -, *, /, %, ^) on numeric fields  
-🔗 **String Concatenation**: Combine multiple fields with advanced templates  
+🔗 **String Operations**: Combine fields with templates and filter with comparison operators (contains, startsWith, endsWith)  
 📝 **Constants**: Inject static values (timestamps, GUIDs, etc.)  
 🏗️ **Nested Transformations**: Deep object structure mapping  
 🎮 **Interactive Playground**: Live web-based transformation editor  
 🌐 **REST API**: Complete Swagger UI for testing transformations  
 ⚡ **High Performance**: Built on System.Text.Json for speed (6μs for math operations)  
-🧪 **Comprehensive Testing**: 23 test cases covering complex multi-condition scenarios  
+🧪 **Comprehensive Testing**: 26 test cases covering conditional aggregation scenarios  
 
 ## 📦 Installation
 
@@ -245,7 +255,46 @@ Perform calculations on arrays:
 
 Available operations: `sum`, `avg`, `min`, `max`, `count`, `first`, `last`, `join`
 
-### 6. Mathematical Operations
+### 6. Conditional Aggregation
+Filter array elements before performing aggregation operations:
+
+```json
+{
+    "mappings": [
+        {
+            "to": "totalHighValueTransactions",
+            "from": "$.transactions[*]",
+            "aggregation": {
+                "type": "sum",
+                "field": "amount", 
+                "condition": "$.item.amount > 100"
+            }
+        },
+        {
+            "to": "highPriorityCompletedOrders",
+            "from": "$.orders[*]",
+            "aggregation": {
+                "type": "sum",
+                "field": "amount",
+                "condition": "$.item.status == 'completed' && $.item.priority == 'high' && $.item.amount > 100"
+            }
+        },
+        {
+            "to": "completedOrderCount",
+            "from": "$.orders[*]",
+            "aggregation": {
+                "type": "count",
+                "condition": "$.item.status == 'completed'"
+            }
+        }
+    ]
+}
+```
+
+**Available aggregation types:** `sum`, `avg`, `min`, `max`, `count`
+**Condition syntax:** Supports same operators as conditional logic (`>=`, `<=`, `==`, `!=`, `>`, `<`, `&&`, `||`, `()`)
+
+### 7. Mathematical Operations
 Perform comprehensive arithmetic calculations:
 
 ```json
@@ -390,14 +439,16 @@ dotnet run                              # Display transformation examples
 
 ### Example Scenarios
 
-The library includes 6 comprehensive transformation scenarios:
-
 1. **Field Mapping** - Basic field copying and restructuring
 2. **Conditional Logic** - Age-based categorization with if/else
-3. **Aggregation** - Sum, average, count operations on arrays
-4. **Math Operations** - Arithmetic calculations with mixed operands
-5. **String Concatenation** - Template-based string building
-6. **Complex Transformation** - Multi-step nested transformations
+3. **Multi-Condition Logic** - Complex boolean expressions with AND/OR operators
+4. **Aggregation** - Sum, average, count operations on arrays
+5. **Conditional Aggregation - Simple** - Filter arrays before aggregation
+6. **Conditional Aggregation - Complex** - Multi-condition array filtering
+7. **Math Operations** - Arithmetic calculations with mixed operands
+8. **String Operations** - Template concatenation and comparison operators (contains, startsWith, endsWith)
+9. **Complex String Operations** - Advanced string filtering with aggregation and conditional logic
+10. **Complex Transformation** - Multi-step nested transformations
 
 ## 🎮 Interactive Playground
 
@@ -422,14 +473,16 @@ dotnet run -- --api --port 5260
 - **🎯 Syntax Highlighting**: JSON syntax highlighting for better readability
 - **⚠️ Error Handling**: Clear error messages and validation feedback
 
-### 🎭 Example Scenarios Available
-
 1. **Simple Field Mapping**: Basic property copying and renaming
 2. **Conditional Logic**: Age-based status assignment with if/else conditions
-3. **String Concatenation**: Combining multiple fields with templates
-4. **Aggregation Operations**: Sum, count, and average calculations
-5. **Mathematical Operations**: Arithmetic on numeric fields
-6. **Complex Transformations**: Multi-level mapping with all features combined
+3. **Multi-Condition Logic**: Complex boolean expressions with AND/OR operators
+4. **String Operations**: Template concatenation and comparison operators
+5. **Complex String Operations**: Advanced string filtering with aggregation and conditional logic
+6. **Aggregation Operations**: Sum, count, and average calculations
+7. **Conditional Aggregation - Simple**: Filter arrays before aggregation
+7. **Conditional Aggregation - Complex**: Multi-condition array filtering
+8. **Mathematical Operations**: Arithmetic on numeric fields
+9. **Complex Transformations**: Multi-level mapping with all features combined
 
 ### 🔄 How to Use the Playground
 
@@ -489,6 +542,7 @@ dotnet test --logger html --results-directory ./TestResults
 # Run specific test categories
 dotnet test --filter "Category=BasicTransformation"
 dotnet test --filter "Category=ComplexConditions" 
+dotnet test --filter "Category=ConditionalAggregation"
 dotnet test --filter "Category=Performance"
 
 # Run benchmarks for performance analysis
@@ -514,10 +568,13 @@ cd examples && dotnet run -- --tests
 - ✅ **Complex nested conditions** with parentheses grouping
 - ✅ **Edge cases** with null values and missing fields
 
-#### **Advanced Operations Tests (9 tests)**
+#### **Advanced Operations Tests (12 tests)**
 - ✅ Mathematical operations (add, multiply, power, modulo)
 - ✅ String concatenation with complex templates
 - ✅ Aggregation functions (sum, count, average, min, max)
+- ✅ **Conditional aggregation** with simple and complex filters
+- ✅ **Array element filtering** before aggregation operations
+- ✅ **Multi-condition aggregation** with AND/OR operators
 - ✅ Conditional string operations
 - ✅ Mixed data type handling
 - ✅ Error handling and validation

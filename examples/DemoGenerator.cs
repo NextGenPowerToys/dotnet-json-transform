@@ -59,6 +59,10 @@ public class DemoGenerator
         var demo5 = await RunStringConcatenationDemo();
         results.Add(demo5);
 
+        // Demo 5b: Complex String Operations
+        var demo5b = await RunComplexStringOperationsDemo();
+        results.Add(demo5b);
+
         // Demo 6: Complex Nested Transformation
         var demo6 = await RunComplexTransformationDemo();
         results.Add(demo6);
@@ -316,6 +320,113 @@ public class DemoGenerator
         {
             Title = "🔗 String Concatenation",
             Description = "Combine multiple fields with templates",
+            SourceJson = FormatJson(sourceJson),
+            TemplateJson = FormatJson(templateJson),
+            ResultJson = FormatJson(result),
+            ExecutionTime = "< 1ms"
+        };
+    }
+
+    private async Task<DemoResult> RunComplexStringOperationsDemo()
+    {
+        var sourceJson = """
+        {
+            "employees": [
+                { "name": "Alice Admin", "email": "alice.admin@company.com", "department": "IT", "files": ["report.pdf", "data.xlsx"] },
+                { "name": "Bob Support", "email": "bob.support@company.com", "department": "Customer Service", "files": ["guide.pdf", "help.docx"] },
+                { "name": "Charlie Dev", "email": "charlie@external.com", "department": "Engineering", "files": ["code.js", "README.md"] }
+            ],
+            "company": "TechCorp",
+            "reportDate": "2025-07-16"
+        }
+        """;
+
+        var templateJson = """
+        {
+            "mappings": [
+                {
+                    "from": "$.employees[*]",
+                    "to": "processedEmployees",
+                    "template": {
+                        "mappings": [
+                            {
+                                "from": "$.name",
+                                "to": "name"
+                            },
+                            {
+                                "from": "$.email",
+                                "to": "accessLevel",
+                                "conditions": [
+                                    {
+                                        "if": "$.email contains 'admin' || $.email startsWith 'alice'",
+                                        "then": "Administrator"
+                                    },
+                                    {
+                                        "if": "$.email contains 'support' && $.department == 'Customer Service'",
+                                        "then": "Support Agent"
+                                    },
+                                    {
+                                        "if": "$.email endsWith '@company.com'",
+                                        "then": "Employee"
+                                    },
+                                    {
+                                        "else": true,
+                                        "then": "External"
+                                    }
+                                ]
+                            },
+                            {
+                                "to": "badge",
+                                "concat": "{$.name} - {$.accessLevel}"
+                            },
+                            {
+                                "to": "pdfCount",
+                                "from": "$.files[*]",
+                                "aggregation": {
+                                    "type": "count",
+                                    "condition": "$.item endsWith '.pdf'"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "to": "summary",
+                    "template": {
+                        "mappings": [
+                            {
+                                "to": "reportTitle",
+                                "concat": "{$.company} Employee Report - {$.reportDate}"
+                            },
+                            {
+                                "to": "companyEmployees",
+                                "from": "$.employees[*]",
+                                "aggregation": {
+                                    "type": "count",
+                                    "condition": "$.item.email endsWith '@company.com'"
+                                }
+                            },
+                            {
+                                "to": "adminUsers",
+                                "from": "$.employees[*]",
+                                "aggregation": {
+                                    "type": "count",
+                                    "condition": "$.item.email contains 'admin'"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+        """;
+
+        var result = await _transformer.TransformAsync(sourceJson, templateJson);
+
+        return new DemoResult
+        {
+            Title = "🔍 Complex String Operations",
+            Description = "Advanced string comparison operators (contains, startsWith, endsWith) with conditional logic and aggregation",
             SourceJson = FormatJson(sourceJson),
             TemplateJson = FormatJson(templateJson),
             ResultJson = FormatJson(result),

@@ -80,8 +80,20 @@ public class TransformEngine
         }
         else if (!string.IsNullOrEmpty(mapping.Aggregate))
         {
-            // Aggregation operation
-            value = ProcessAggregation(sourceData, mapping);
+            // Aggregation operation - handle conditional aggregation if conditions are present
+            if (mapping.Conditions != null && mapping.Conditions.Count > 0)
+            {
+                value = ProcessConditionalAggregation(sourceData, mapping);
+            }
+            else
+            {
+                value = ProcessAggregation(sourceData, mapping);
+            }
+        }
+        else if (mapping.Aggregation != null)
+        {
+            // New aggregation format with built-in conditions
+            value = ProcessAdvancedAggregation(sourceData, mapping);
         }
         else if (!string.IsNullOrEmpty(mapping.From))
         {
@@ -94,8 +106,8 @@ public class TransformEngine
             value = ProcessNestedTransformation(sourceData, mapping.Template);
         }
 
-        // Apply conditional logic if present
-        if (mapping.Conditions != null && mapping.Conditions.Count > 0)
+        // Apply conditional logic if present (but not for aggregation, which handles its own conditions)
+        if (mapping.Conditions != null && mapping.Conditions.Count > 0 && string.IsNullOrEmpty(mapping.Aggregate))
         {
             value = ProcessConditions(mapping.Conditions, sourceData, value);
         }
@@ -262,6 +274,301 @@ public class TransformEngine
         }
 
         return currentValue;
+    }
+
+    private JsonNode? ProcessConditionalAggregation(JsonNode? sourceData, Mapping mapping)
+    {
+        if (string.IsNullOrEmpty(mapping.From) || string.IsNullOrEmpty(mapping.Aggregate) || sourceData == null)
+            return null;
+
+        try
+        {
+            // Special handling for count operation - count all elements regardless of conditions
+            if (mapping.Aggregate.ToLower() == "count")
+            {
+                var resolvedNode = PathResolver.ResolveSingle(sourceData, mapping.From);
+                if (resolvedNode is JsonArray array)
+                {
+                    return JsonValue.Create(array.Count);
+                }
+                else
+                {
+                    return JsonValue.Create(resolvedNode != null ? 1 : 0);
+                }
+            }
+
+            // For other aggregations, resolve as array and apply conditions to each element
+            var arrayData = PathResolver.ResolveArray(sourceData, mapping.From);
+            if (arrayData == null || arrayData.Count == 0)
+                return null;
+
+            // Apply conditions to each array element
+            var processedValues = new List<JsonNode>();
+            for (int i = 0; i < arrayData.Count; i++)
+            {
+                var arrayElement = arrayData[i];
+                
+                // Create temporary source data for condition evaluation
+                // We need to create a context where the current array element can be evaluated
+                var tempSourceData = CreateArrayElementContext(sourceData, mapping.From, i);
+                
+                // Apply conditions to this element
+                if (mapping.Conditions != null && arrayElement != null)
+                {
+                    var conditionResult = ProcessConditionsForArrayElement(mapping.Conditions, tempSourceData, arrayElement, mapping.From, i);
+                    
+                    if (conditionResult != null)
+                    {
+                        processedValues.Add(conditionResult);
+                    }
+                }
+            }
+
+            // Aggregate the processed values
+            var jsonArray = new JsonArray();
+            foreach (var processedValue in processedValues)
+            {
+                jsonArray.Add(processedValue);
+            }
+            return AggregationProcessor.Aggregate(jsonArray, mapping.Aggregate);
+        }
+        catch (Exception ex) when (!_settings.StrictMode)
+        {
+            if (_settings.EnableTracing)
+            {
+                Console.WriteLine($"Conditional aggregation failed for {mapping.From}: {ex.Message}");
+            }
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Creates a context for evaluating conditions on a specific array element
+    /// </summary>
+    private JsonNode CreateArrayElementContext(JsonNode sourceData, string arrayPath, int index)
+    {
+        // Create a copy of the source data for this context
+        var contextData = JsonNode.Parse(sourceData.ToJsonString());
+        
+        // For array element conditions, we need to modify the path to point to the specific element
+        // e.g., "$.orders[*].amount" becomes "$.orders[0].amount" for index 0
+        return contextData ?? sourceData;
+    }
+
+    /// <summary>
+    /// Processes conditions for a specific array element
+    /// </summary>
+    private JsonNode? ProcessConditionsForArrayElement(List<Condition> conditions, JsonNode sourceData, JsonNode arrayElement, string arrayPath, int index)
+    {
+        foreach (var condition in conditions)
+        {
+            try
+            {
+                // Modify the condition to evaluate against the specific array element
+                var modifiedCondition = CreateConditionForArrayElement(condition, arrayPath, index);
+                var conditionResult = ConditionEvaluator.EvaluateCondition(modifiedCondition, sourceData);
+                
+                if (conditionResult != null)
+                {
+                    // If condition is met, return the appropriate value
+                    if (modifiedCondition.Then != null)
+                    {
+                        // If "then" is a JSONPath, resolve it; otherwise use as literal
+                        if (modifiedCondition.Then.ToString()?.StartsWith("$") == true)
+                        {
+                            var thenPath = CreatePathForArrayElement(modifiedCondition.Then.ToString(), arrayPath, index);
+                            return PathResolver.ResolveSingle(sourceData, thenPath);
+                        }
+                        else
+                        {
+                            return ConvertToJsonNode(modifiedCondition.Then);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) when (!_settings.StrictMode)
+            {
+                if (_settings.EnableTracing)
+                {
+                    Console.WriteLine($"Array element condition evaluation failed: {ex.Message}");
+                }
+            }
+        }
+
+        // If no condition matched, check for else clause in last condition
+        var lastCondition = conditions.LastOrDefault();
+        if (lastCondition?.Else != null)
+        {
+            if (lastCondition.Else.ToString()?.StartsWith("$") == true)
+            {
+                var elsePath = CreatePathForArrayElement(lastCondition.Else.ToString(), arrayPath, index);
+                return PathResolver.ResolveSingle(sourceData, elsePath);
+            }
+            else
+            {
+                return ConvertToJsonNode(lastCondition.Else);
+            }
+        }
+
+        // Default: return the original array element
+        return arrayElement;
+    }
+
+    /// <summary>
+    /// Creates a condition for a specific array element by replacing [*] with [index]
+    /// </summary>
+    private Condition CreateConditionForArrayElement(Condition condition, string arrayPath, int index)
+    {
+        var modifiedCondition = new Condition
+        {
+            If = ReplaceArrayWildcard(condition.If, arrayPath, index),
+            Then = condition.Then,
+            Else = condition.Else
+        };
+
+        return modifiedCondition;
+    }
+
+    /// <summary>
+    /// Creates a JSONPath for a specific array element by replacing [*] with [index]
+    /// </summary>
+    private string CreatePathForArrayElement(string? path, string arrayPath, int index)
+    {
+        if (string.IsNullOrEmpty(path))
+            return string.Empty;
+
+        return ReplaceArrayWildcard(path, arrayPath, index);
+    }
+
+    /// <summary>
+    /// Replaces array wildcard [*] with specific index [i]
+    /// </summary>
+    private string ReplaceArrayWildcard(string? expression, string arrayPath, int index)
+    {
+        if (string.IsNullOrEmpty(expression))
+            return string.Empty;
+
+        // Replace [*] with [index] in the expression
+        // This handles cases like "$.orders[*].amount" -> "$.orders[0].amount"
+        return expression.Replace("[*]", $"[{index}]");
+    }
+
+    /// <summary>
+    /// Processes the new advanced aggregation format with built-in conditions
+    /// </summary>
+    private JsonNode? ProcessAdvancedAggregation(JsonNode? sourceData, Mapping mapping)
+    {
+        if (mapping.Aggregation == null || string.IsNullOrEmpty(mapping.From) || sourceData == null)
+            return null;
+
+        try
+        {
+            // Resolve the array data
+            var arrayData = PathResolver.ResolveArray(sourceData, mapping.From);
+            if (arrayData == null || arrayData.Count == 0)
+            {
+                return null;
+            }
+
+            // Apply condition filter if specified
+            var filteredValues = new List<JsonNode>();
+            
+            if (!string.IsNullOrEmpty(mapping.Aggregation.Condition))
+            {
+                for (int i = 0; i < arrayData.Count; i++)
+                {
+                    var arrayElement = arrayData[i];
+                    if (arrayElement == null) 
+                    {
+                        continue;
+                    }
+
+                    // Create a context where 'item' refers to the current array element
+                    var itemContextJson = $"{{\"item\":{arrayElement.ToJsonString()}}}";
+                    var itemContext = JsonNode.Parse(itemContextJson);
+                    
+                    if (itemContext == null)
+                    {
+                        continue;
+                    }
+
+                    // Evaluate the condition using the ConditionEvaluator with complex expression support
+                    bool conditionMet = false;
+                    try
+                    {
+                        conditionMet = ConditionEvaluator.EvaluateExpression(mapping.Aggregation.Condition, itemContext);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (_settings.EnableTracing)
+                        {
+                            Console.WriteLine($"Debug - Condition evaluation failed for element {i}: {ex.Message}");
+                        }
+                        continue;
+                    }
+
+                    if (conditionMet)
+                    {
+                        // Get the field value if specified, otherwise use the whole element
+                        if (!string.IsNullOrEmpty(mapping.Aggregation.Field))
+                        {
+                            if (arrayElement is JsonObject obj && obj.TryGetPropertyValue(mapping.Aggregation.Field, out var fieldValue))
+                            {
+                                filteredValues.Add(fieldValue?.DeepClone());
+                            }
+                        }
+                        else
+                        {
+                            filteredValues.Add(arrayElement.DeepClone());
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // No condition, use all elements
+                for (int i = 0; i < arrayData.Count; i++)
+                {
+                    var arrayElement = arrayData[i];
+                    if (arrayElement == null) continue;
+
+                    if (!string.IsNullOrEmpty(mapping.Aggregation.Field))
+                    {
+                        if (arrayElement is JsonObject obj && obj.TryGetPropertyValue(mapping.Aggregation.Field, out var fieldValue))
+                        {
+                            filteredValues.Add(fieldValue?.DeepClone());
+                        }
+                    }
+                    else
+                    {
+                        filteredValues.Add(arrayElement.DeepClone());
+                    }
+                }
+            }
+
+            // Perform aggregation on filtered values
+            if (filteredValues.Count == 0)
+            {
+                return mapping.Aggregation.Type.ToLower() == "count" ? JsonValue.Create(0) : null;
+            }
+
+            var jsonArray = new JsonArray();
+            foreach (var value in filteredValues)
+            {
+                jsonArray.Add(value);
+            }
+
+            var result = AggregationProcessor.Aggregate(jsonArray, mapping.Aggregation.Type);
+            return result;
+        }
+        catch (Exception ex) when (!_settings.StrictMode)
+        {
+            if (_settings.EnableTracing)
+            {
+                Console.WriteLine($"Advanced aggregation failed for {mapping.From}: {ex.Message}");
+            }
+            return null;
+        }
     }
 
     private static JsonNode? ConvertToJsonNode(object? value)

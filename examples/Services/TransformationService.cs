@@ -194,8 +194,8 @@ public class TransformationService
             },
             new ExampleScenario
             {
-                Name = "String Concatenation",
-                Description = "Template-based string building",
+                Name = "String Concatenation - Basic",
+                Description = "Simple template-based string building",
                 SourceJson = """
                 {
                     "user": {
@@ -220,6 +220,198 @@ public class TransformationService
                         {
                             "to": "$.metadata.timestamp",
                             "value": "now"
+                        }
+                    ]
+                }
+                """
+            },
+            new ExampleScenario
+            {
+                Name = "String Operations",
+                Description = "Advanced string concatenation and comparison operators (contains, startsWith, endsWith)",
+                SourceJson = """
+                {
+                    "employees": [
+                        { "name": "Alice Admin", "email": "alice.admin@company.com", "department": "IT", "files": ["report.pdf", "data.xlsx"] },
+                        { "name": "Bob Support", "email": "bob.support@company.com", "department": "Customer Service", "files": ["guide.pdf", "help.docx"] },
+                        { "name": "Charlie Dev", "email": "charlie@external.com", "department": "Engineering", "files": ["code.js", "README.md"] }
+                    ],
+                    "metadata": {
+                        "company": "TechCorp",
+                        "generated": "2025-07-16"
+                    }
+                }
+                """,
+                TemplateJson = """
+                {
+                    "mappings": [
+                        {
+                            "from": "$.employees[*]",
+                            "to": "processedEmployees",
+                            "template": {
+                                "mappings": [
+                                    {
+                                        "from": "$.name",
+                                        "to": "name"
+                                    },
+                                    {
+                                        "from": "$.email",
+                                        "to": "accessLevel",
+                                        "conditions": [
+                                            {
+                                                "if": "$.email contains 'admin' || $.email startsWith 'alice'",
+                                                "then": "Administrator"
+                                            },
+                                            {
+                                                "if": "$.email contains 'support' && $.department == 'Customer Service'",
+                                                "then": "Support Agent"
+                                            },
+                                            {
+                                                "if": "$.email endsWith '@company.com'",
+                                                "then": "Employee"
+                                            },
+                                            {
+                                                "else": true,
+                                                "then": "External"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "to": "badge",
+                                        "concat": "{$.name} - {$.accessLevel} ({$.department})"
+                                    },
+                                    {
+                                        "to": "pdfFileCount",
+                                        "from": "$.files[*]",
+                                        "aggregation": {
+                                            "type": "count",
+                                            "condition": "$.item endsWith '.pdf'"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "to": "summary",
+                            "template": {
+                                "mappings": [
+                                    {
+                                        "to": "reportTitle",
+                                        "concat": "{$.metadata.company} Employee Report - {$.metadata.generated}"
+                                    },
+                                    {
+                                        "to": "companyEmployeeCount",
+                                        "from": "$.employees[*]",
+                                        "aggregation": {
+                                            "type": "count",
+                                            "condition": "$.item.email endsWith '@company.com'"
+                                        }
+                                    },
+                                    {
+                                        "to": "adminCount",
+                                        "from": "$.employees[*]",
+                                        "aggregation": {
+                                            "type": "count",
+                                            "condition": "$.item.email contains 'admin'"
+                                        }
+                                    },
+                                    {
+                                        "to": "externalCount",
+                                        "from": "$.employees[*]",
+                                        "aggregation": {
+                                            "type": "count",
+                                            "condition": "!$.item.email endsWith '@company.com'"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+                """
+            },
+            new ExampleScenario
+            {
+                Name = "Conditional Aggregation - Simple",
+                Description = "Filter array elements before aggregation with simple conditions",
+                SourceJson = """
+                {
+                    "transactions": [
+                        { "amount": 50.5, "type": "expense" },
+                        { "amount": 150.0, "type": "income" },
+                        { "amount": 75.0, "type": "expense" },
+                        { "amount": 200.0, "type": "income" },
+                        { "amount": 25.0, "type": "expense" }
+                    ]
+                }
+                """,
+                TemplateJson = """
+                {
+                    "mappings": [
+                        {
+                            "to": "totalHighValueTransactions",
+                            "from": "$.transactions[*]",
+                            "aggregation": {
+                                "type": "sum",
+                                "field": "amount",
+                                "condition": "$.item.amount > 100"
+                            }
+                        },
+                        {
+                            "to": "highValueTransactionCount",
+                            "from": "$.transactions[*]",
+                            "aggregation": {
+                                "type": "count",
+                                "condition": "$.item.amount > 100"
+                            }
+                        }
+                    ]
+                }
+                """
+            },
+            new ExampleScenario
+            {
+                Name = "Conditional Aggregation - Complex",
+                Description = "Filter array elements with complex boolean conditions before aggregation",
+                SourceJson = """
+                {
+                    "orders": [
+                        { "amount": 50.5, "status": "completed", "priority": "low" },
+                        { "amount": 150.0, "status": "completed", "priority": "high" },
+                        { "amount": 75.0, "status": "pending", "priority": "medium" },
+                        { "amount": 200.0, "status": "completed", "priority": "high" },
+                        { "amount": 125.0, "status": "completed", "priority": "medium" }
+                    ]
+                }
+                """,
+                TemplateJson = """
+                {
+                    "mappings": [
+                        {
+                            "to": "totalHighPriorityCompletedOrders",
+                            "from": "$.orders[*]",
+                            "aggregation": {
+                                "type": "sum",
+                                "field": "amount",
+                                "condition": "$.item.status == 'completed' && $.item.priority == 'high' && $.item.amount > 100"
+                            }
+                        },
+                        {
+                            "to": "completedOrdersOverTarget",
+                            "from": "$.orders[*]",
+                            "aggregation": {
+                                "type": "count",
+                                "condition": "$.item.status == 'completed' && $.item.amount >= 100"
+                            }
+                        },
+                        {
+                            "to": "averageCompletedOrderValue",
+                            "from": "$.orders[*]",
+                            "aggregation": {
+                                "type": "avg",
+                                "field": "amount",
+                                "condition": "$.item.status == 'completed'"
+                            }
                         }
                     ]
                 }

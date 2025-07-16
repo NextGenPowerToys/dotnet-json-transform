@@ -37,7 +37,7 @@ dotnet run -- --api --port 3000
 
 ### ⚡ Interactive Controls
 - **🚀 Transform Button**: Execute transformations with visual feedback
-- **📚 Example Library**: Six pre-loaded transformation scenarios
+- **📚 Example Library**: Nine pre-loaded transformation scenarios
 - **🔧 Format JSON**: Beautify and format JSON with proper indentation
 - **🗑️ Clear All**: Reset both editors to start fresh
 - **📋 Copy Results**: One-click copying of transformation output
@@ -51,7 +51,7 @@ dotnet run -- --api --port 3000
 
 ## 📚 Example Scenarios
 
-The playground includes six comprehensive examples that demonstrate all major features:
+The playground includes nine comprehensive examples that demonstrate all major features:
 
 ### 1. 🔄 Simple Field Mapping
 **Purpose**: Basic property copying and renaming
@@ -95,21 +95,122 @@ The playground includes six comprehensive examples that demonstrate all major fe
 }
 ```
 
-### 3. 🔗 String Concatenation
-**Purpose**: Combining multiple fields with templates
+### 3. 🎯 Multi-Condition Logic
+**Purpose**: Complex boolean expressions with AND/OR operators
 ```json
 // Template
 {
   "mappings": [
     {
-      "to": "$.user.displayName",
-      "concat": "{$.user.title} {$.user.firstName} {$.user.lastName}"
+      "to": "$.result.eligibleForPromotion",
+      "conditions": [
+        {
+          "if": "$.employee.yearsOfExperience >= 3 && $.employee.performanceScore >= 9.0",
+          "then": "Yes - Meets Experience and Performance Requirements"
+        }
+      ]
     }
   ]
 }
 ```
 
-### 4. 📊 Aggregation Operations
+### 4. 🔗 String Operations
+**Purpose**: Template concatenation and string comparison operators
+```json
+// Template - Concatenation
+{
+  "mappings": [
+    {
+      "to": "$.user.displayName",
+      "concat": "{$.user.title} {$.user.firstName} {$.user.lastName}"
+    },
+    {
+      "from": "$.user.email", 
+      "to": "$.user.accountType",
+      "conditions": [
+        {
+          "if": "$.user.email contains '@company.com'",
+          "then": "Employee"
+        },
+        {
+          "if": "$.user.email startsWith 'admin'",
+          "then": "Administrator"
+        },
+        {
+          "else": true,
+          "then": "External"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 4b. 🔍 Complex String Operations
+**Purpose**: Advanced string filtering with aggregation and complex logic
+```json
+// Template - Advanced String Processing
+{
+  "mappings": [
+    {
+      "from": "$.employees[*]",
+      "to": "processedEmployees",
+      "template": {
+        "mappings": [
+          {
+            "from": "$.name",
+            "to": "name"
+          },
+          {
+            "from": "$.email",
+            "to": "accessLevel",
+            "conditions": [
+              {
+                "if": "$.email contains 'admin' || $.email startsWith 'alice'",
+                "then": "Administrator"
+              },
+              {
+                "if": "$.email contains 'support' && $.department == 'Customer Service'",
+                "then": "Support Agent"
+              },
+              {
+                "if": "$.email endsWith '@company.com'",
+                "then": "Employee"
+              },
+              {
+                "else": true,
+                "then": "External"
+              }
+            ]
+          },
+          {
+            "to": "badge",
+            "concat": "{$.name} - {$.accessLevel}"
+          },
+          {
+            "to": "pdfFileCount",
+            "from": "$.files[*]",
+            "aggregation": {
+              "type": "count",
+              "condition": "$.item endsWith '.pdf'"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "to": "companyEmployeeCount",
+      "from": "$.employees[*]",
+      "aggregation": {
+        "type": "count",
+        "condition": "$.item.email endsWith '@company.com'"
+      }
+    }
+  ]
+}
+```
+
+### 5. 📊 Aggregation Operations
 **Purpose**: Sum, count, and average calculations on arrays
 ```json
 // Template
@@ -129,7 +230,45 @@ The playground includes six comprehensive examples that demonstrate all major fe
 }
 ```
 
-### 5. 🧮 Mathematical Operations
+### 6. 📊 Conditional Aggregation - Simple
+**Purpose**: Filter arrays before aggregation with basic conditions
+```json
+// Template
+{
+  "mappings": [
+    {
+      "to": "totalHighValueTransactions",
+      "from": "$.transactions[*]",
+      "aggregation": {
+        "type": "sum",
+        "field": "amount",
+        "condition": "$.item.amount > 100"
+      }
+    }
+  ]
+}
+```
+
+### 7. 📊 Conditional Aggregation - Complex
+**Purpose**: Multi-condition array filtering before aggregation
+```json
+// Template
+{
+  "mappings": [
+    {
+      "to": "totalHighPriorityCompletedOrders",
+      "from": "$.orders[*]",
+      "aggregation": {
+        "type": "sum",
+        "field": "amount",
+        "condition": "$.item.status == 'completed' && $.item.priority == 'high' && $.item.amount > 100"
+      }
+    }
+  ]
+}
+```
+
+### 8. 🧮 Mathematical Operations
 **Purpose**: Arithmetic operations on numeric fields
 ```json
 // Template
@@ -147,7 +286,7 @@ The playground includes six comprehensive examples that demonstrate all major fe
 }
 ```
 
-### 6. 🏗️ Complex Transformation
+### 9. 🏗️ Complex Transformation
 **Purpose**: Multi-level mapping combining all features
 - Field mapping + conditional logic
 - Aggregation + mathematical operations  

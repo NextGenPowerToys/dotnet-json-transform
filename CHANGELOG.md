@@ -5,7 +5,135 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.3.0] - 2025-07-16
+
+### 🚀 Added
+- **String Operations**: Advanced string comparison operators for conditional logic
+  - `contains`: Check if string contains substring (case-sensitive)
+  - `startsWith`: Check if string starts with specific prefix
+  - `endsWith`: Check if string ends with specific suffix
+  - Full integration with conditional logic and aggregation filters
+- **Complex String Examples**: Enhanced playground and API with sophisticated string operations
+  - Employee email filtering using string comparison operators
+  - Badge generation with conditional string concatenation
+  - File type counting using `endsWith` filtering
+  - Dynamic access level assignment based on email patterns
+- **Enhanced Template Engine**: String comparison operators in JSONPath expressions
+- **Real-world Scenarios**: Employee processing, file classification, domain filtering
+
+### 🧪 Testing Enhancements
+- **String Operations Tests**: 10 comprehensive test scenarios covering all string operators
+  - Basic string comparison tests for contains, startsWith, endsWith
+  - Integration with conditional logic and aggregation
+  - Complex boolean expressions with string operators
+  - Template concatenation with dynamic values
+- **Test Suite Expansion**: Increased from 26 to 36 total passing tests
+- **Production Scenarios**: Email validation, file processing, domain filtering
+
+### 📚 Documentation Updates
+- **README Updates**: Updated test counts from 26 to 36 passing tests
+- **Playground Examples**: Added "String Operations" with complex employee processing
+- **Console Examples**: Enhanced string concatenation examples with 3 sub-scenarios
+- **API Documentation**: New "String Operations" example in transformation service
+- **Demo Generation**: Added complex string operations HTML demo
+
+### 🔧 Technical Implementation
+- **StringComparison Methods**: Efficient string comparison implementation
+- **JSONPath Integration**: String operators work seamlessly with path expressions
+- **Template Processing**: Enhanced concatenation with conditional string operations
+- **Performance Optimization**: Fast string comparison operations
+
+### Changed
+- **Test Count**: Updated from 26 to 36 passing tests across all documentation
+- **Example Count**: Maintained 9 playground scenarios with enhanced string operations
+- **Demo Coverage**: Added 7th demo scenario for string operations
+
+## [2.2.0] - 2025-07-16
+
+### 🚀 Added
+- **Conditional Aggregation**: Filter array elements before performing aggregation operations
+  - New `aggregation` property in mapping templates with `type`, `field`, and `condition` support
+  - Support for complex boolean conditions with `&&` and `||` operators in aggregation filters
+  - Array element filtering before sum, count, average, min, max operations
+  - JSONPath-based condition evaluation for array element selection
+- **Enhanced Examples**: Added conditional aggregation examples to both API and playground
+  - "Conditional Aggregation - Simple": Basic filtering with amount thresholds
+  - "Conditional Aggregation - Complex": Multi-condition filtering with business logic
+  - Interactive examples in playground UI with working demonstrations
+- **AggregationRule Model**: New model for advanced aggregation configuration
+- **ProcessAdvancedAggregation**: Comprehensive aggregation engine with condition support
+
+### 🧪 Testing Enhancements
+- **Conditional Aggregation Tests**: 3 new comprehensive test scenarios
+  - Simple amount filtering with sum and count operations
+  - Complex multi-condition filtering with AND operators
+  - Count aggregation with status-based filtering
+- **Test Suite Expansion**: Increased from 23 to 26 total passing tests
+- **Real-world Scenarios**: Transaction filtering, order processing, inventory management
+
+### 📚 Documentation Updates
+- **README Enhancements**: Added conditional aggregation section with examples
+- **API Documentation**: Updated with new aggregation examples and endpoints
+- **Playground Examples**: Interactive demonstrations of conditional aggregation
+- **Feature Coverage**: Complete documentation of all transformation capabilities
+
+### 🔧 Technical Implementation
+- **JsonNode Cloning**: Proper handling of parent-child relationships in aggregation
+- **Context Creation**: Enhanced condition evaluation for array element processing
+- **Error Handling**: Robust validation for aggregation conditions and field extraction
+- **Performance Optimization**: Efficient filtering and aggregation operations
+
+### Changed
+- **Test Count**: Updated from 23 to 26 passing tests across all documentation
+- **Example Count**: Increased playground examples from 7 to 9 scenarios
+- **API Examples**: Enhanced transformation service with conditional aggregation scenarios
+
+## [2.1.0] - 2025-07-15
+
+### 🚀 Added
+- **Advanced Multi-Condition Support**: Complex conditional expressions with `&&` (AND) and `||` (OR) operators
+- **Parentheses Grouping**: Support for complex expressions like `(A || B) && C`
+- **Comprehensive Test Suite**: Expanded from 8 to 23 test cases with detailed coverage
+- **Performance Benchmark Suite**: 8 comprehensive benchmark scenarios covering all operation types
+- **Complex Condition Tests**: Dedicated test class for multi-criteria validation scenarios
+- **Integration Tests**: End-to-end transformation workflow validation
+- **HTML Test Reports**: Detailed execution analysis with timing and memory usage
+- **HTML Benchmark Reports**: Performance metrics with histograms and statistical analysis
+
+### ⚡ Performance
+- **Outstanding Math Operations**: 6.35μs mean time (131K operations tested)
+- **Excellent Conditional Logic**: 5.63μs mean time (131K operations tested)  
+- **Efficient Multi-Conditions**: 39.17μs for high-complexity scenarios (16K operations tested)
+- **Optimized Memory Usage**: Reasonable allocation scaling with complexity
+- **Sub-microsecond Operations**: For simple conditional logic
+
+### 🧪 Testing Enhancements
+- **Employee Eligibility Tests**: Multi-criteria promotion and bonus logic
+- **Work Style Categorization**: Location and department-based classification
+- **Executive Track Assessment**: Complex nested conditions with OR operators
+- **Real-world Scenarios**: Production-ready validation cases
+- **Error Handling Tests**: Comprehensive edge case coverage
+- **Performance Validation**: Benchmark tests for all operation types
+
+### 📚 Documentation
+- **Updated README**: Comprehensive feature overview with performance metrics
+- **Benchmark Results**: Detailed performance analysis with comparisons
+- **Test Documentation**: Coverage explanation and example scenarios
+- **Version History**: Changelog tracking major releases
+- **Contributing Guidelines**: Development setup and testing requirements
+
+### 🔧 Developer Experience
+- **Enhanced CLI**: Multiple execution modes (`--tests`, `--demo`, `--api`)
+- **Improved Error Messages**: More descriptive validation feedback
+- **Better Examples**: Real-world transformation scenarios
+- **Performance Guidelines**: Optimization recommendations and targets
+
+### Changed
+- **Package Version**: Updated to 2.1.0 (production ready)
+- **Package Description**: Enhanced with performance metrics and feature highlights
+- **Project Status**: Moved from alpha to production-ready status
+
+## [Unreleased - Previous]
 
 ### Changed
 - 🏢 **Repository Ownership**: Transferred repository ownership to NextGenPowerToys organization

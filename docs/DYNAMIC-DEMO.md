@@ -15,14 +15,15 @@ The Json.Transform library includes a sophisticated **dynamic demo generation sy
 - Updates automatically reflect code changes
 
 ### 📊 Comprehensive Examples
-The demo includes 6 complete transformation scenarios:
+The demo includes 7 complete transformation scenarios:
 
 1. **🔄 Field Mapping** - Basic field copying and restructuring
 2. **🎯 Conditional Logic** - Age-based categorization with if/else
 3. **📊 Aggregation** - Sum, count, average, and max operations
 4. **🧮 Math Operations** - Arithmetic calculations on order data
 5. **🔗 String Concatenation** - Template-based string building
-6. **🏗️ Complex Transformations** - Multi-step nested operations
+6. **🔍 String Operations** - Advanced string comparison operators (contains, startsWith, endsWith)
+7. **🏗️ Complex Transformations** - Multi-step nested operations
 
 ### 🎨 Interactive Features
 - **Syntax Highlighting** - Color-coded JSON with proper formatting

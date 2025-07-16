@@ -428,8 +428,9 @@ class Program
 
     static void StringConcatenationExample()
     {
-        Console.WriteLine("3. String Concatenation:");
+        Console.WriteLine("3. String Operations (Concatenation & Comparison):");
         
+        // Example 3a: Basic concatenation
         var sourceJson = """
         {
             "user": {
@@ -454,8 +455,162 @@ class Program
         var transformer = new JsonTransformer();
         var result = transformer.Transform(sourceJson, templateJson);
         
-        Console.WriteLine($"  Input: {FormatJson(sourceJson)}");
-        Console.WriteLine($"  Output: {FormatJson(result)}");
+        Console.WriteLine("  3a. Basic Template Concatenation:");
+        Console.WriteLine($"    Input: {FormatJson(sourceJson)}");
+        Console.WriteLine($"    Output: {FormatJson(result)}");
+        Console.WriteLine();
+
+        // Example 3b: Complex string operations with conditional logic
+        var complexSourceJson = """
+        {
+            "employees": [
+                { "name": "Alice Admin", "email": "alice.admin@company.com", "department": "IT", "salary": 75000 },
+                { "name": "Bob Support", "email": "bob.support@company.com", "department": "Customer Service", "salary": 45000 },
+                { "name": "Charlie Dev", "email": "charlie@external.com", "department": "Engineering", "salary": 85000 }
+            ]
+        }
+        """;
+
+        var complexTemplateJson = """
+        {
+            "mappings": [
+                {
+                    "from": "$.employees[*]",
+                    "to": "processedEmployees",
+                    "template": {
+                        "mappings": [
+                            {
+                                "from": "$.name",
+                                "to": "name"
+                            },
+                            {
+                                "from": "$.email",
+                                "to": "accessLevel",
+                                "conditions": [
+                                    {
+                                        "if": "$.email contains 'admin' || $.email startsWith 'alice'",
+                                        "then": "Administrator"
+                                    },
+                                    {
+                                        "if": "$.email contains 'support' && $.department == 'Customer Service'",
+                                        "then": "Support Agent"
+                                    },
+                                    {
+                                        "if": "$.email endsWith '@company.com'",
+                                        "then": "Employee"
+                                    },
+                                    {
+                                        "else": true,
+                                        "then": "External"
+                                    }
+                                ]
+                            },
+                            {
+                                "to": "badge",
+                                "concat": "{$.name} ({$.accessLevel})"
+                            },
+                            {
+                                "to": "salaryCategory",
+                                "conditions": [
+                                    {
+                                        "if": "$.salary >= 70000",
+                                        "then": "Senior Level"
+                                    },
+                                    {
+                                        "else": true,
+                                        "then": "Junior Level"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "to": "companyEmployeeCount",
+                    "from": "$.employees[*]",
+                    "aggregation": {
+                        "type": "count",
+                        "condition": "$.item.email endsWith '@company.com'"
+                    }
+                },
+                {
+                    "to": "adminCount",
+                    "from": "$.employees[*]", 
+                    "aggregation": {
+                        "type": "count",
+                        "condition": "$.item.email contains 'admin'"
+                    }
+                }
+            ]
+        }
+        """;
+
+        var complexResult = transformer.Transform(complexSourceJson, complexTemplateJson);
+        
+        Console.WriteLine("  3b. Complex String Operations with Filtering:");
+        Console.WriteLine($"    Input: {FormatJson(complexSourceJson)}");
+        Console.WriteLine($"    Output: {FormatJson(complexResult)}");
+        Console.WriteLine();
+
+        // Example 3c: Dynamic message building
+        var orderSourceJson = """
+        {
+            "orders": [
+                { "id": "ORD-001", "customer": "John Doe", "status": "shipped", "isPriority": true, "total": 299.99, "tracking": "TRK-123" },
+                { "id": "ORD-002", "customer": "Jane Smith", "status": "processing", "isPriority": false, "total": 149.50, "tracking": null }
+            ]
+        }
+        """;
+
+        var messageTemplateJson = """
+        {
+            "mappings": [
+                {
+                    "from": "$.orders[*]",
+                    "to": "notifications",
+                    "template": {
+                        "mappings": [
+                            {
+                                "to": "message",
+                                "conditions": [
+                                    {
+                                        "if": "$.status == 'shipped' && $.isPriority == true",
+                                        "then": {
+                                            "concat": "🚀 PRIORITY: Order {$.id} for {$.customer} shipped! Tracking: {$.tracking}"
+                                        }
+                                    },
+                                    {
+                                        "if": "$.status == 'shipped'",
+                                        "then": {
+                                            "concat": "📦 Order {$.id} for {$.customer} has been shipped. Tracking: {$.tracking}"
+                                        }
+                                    },
+                                    {
+                                        "if": "$.status == 'processing'",
+                                        "then": {
+                                            "concat": "⏳ Order {$.id} for {$.customer} is being processed. Total: ${$.total}"
+                                        }
+                                    },
+                                    {
+                                        "else": true,
+                                        "then": {
+                                            "concat": "📋 Order {$.id} status: {$.status}"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+        """;
+
+        var messageResult = transformer.Transform(orderSourceJson, messageTemplateJson);
+        
+        Console.WriteLine("  3c. Dynamic Message Building:");
+        Console.WriteLine($"    Input: {FormatJson(orderSourceJson)}");
+        Console.WriteLine($"    Output: {FormatJson(messageResult)}");
         Console.WriteLine();
     }
 

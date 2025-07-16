@@ -1,0 +1,4 @@
+{
+  "sourceJson": "{\"orders\":[{\"id\":1,\"amount\":100.5},{\"id\":2,\"amount\":75.25},{\"id\":3,\"amount\":200}]}",
+  "templateJson": "{\"mappings\":[{\"from\":\"$.orders[*].amount\",\"to\":\"$.summary.totalAmount\",\"aggregate\":\"sum\",\"conditions\":[{\"if\":\"$.orders[*].amount >= 75 && $.orders[*].amount<=120\",\"then\":\"$.orders[*].amount\"},{\"if\":\"$.orders[*].amount >= 120\",\"then\":\"0\"}]},{\"from\":\"$.orders\",\"to\":\"$.summary.orderCount\",\"aggregate\":\"count\"},{\"from\":\"$.orders[*].amount\",\"to\":\"$.summary.averageAmount\",\"aggregate\":\"avg\"}]}"
+}

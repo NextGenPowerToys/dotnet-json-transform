@@ -9,7 +9,9 @@ The Json.Transform library has been successfully implemented and is now producti
 ### Core Transformation Capabilities
 - ✅ **Field Mapping**: JSONPath-based field copying and moving
 - ✅ **Conditional Logic**: Complex if/else/elseif conditions with multiple operators
+- ✅ **Conditional Aggregation**: Filter arrays before aggregation with complex boolean conditions
 - ✅ **String Concatenation**: Template-based string composition
+- ✅ **String Operations**: Advanced string comparison operators (contains, startsWith, endsWith)
 - ✅ **Aggregation Operations**: Sum, average, min, max, count, first, last, join
 - ✅ **Mathematical Operations**: Add, subtract, multiply, divide, power, sqrt, abs, round
 - ✅ **Constants**: Static values including timestamps, GUIDs, booleans

@@ -10,42 +10,21 @@
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     
     <!-- Package Information -->
-    <PackageId>NextGetPowerToys.Json.Transform</PackageId>
-    <PackageVersion>2.1.0</PackageVersion>
-    <Authors>NextGetPowerToys</Authors>
-    <Company>NextGetPowerToys</Company>
+    <PackageId>NextGenPowerToys.Json.Transform.Test</PackageId>
+    <PackageVersion>2.3.0</PackageVersion>
+    <Authors>NextGenPowerToys</Authors>
+    <Company>NextGenPowerToys</Company>
     <Product>Json.Transform</Product>
-    <Description>A high-performance .NET JSON transformation engine with advanced conditional logic and comprehensive test coverage. Features: complex multi-condition support (AND/OR operators), mathematical operations, string concatenation, aggregation functions, field mapping, and interactive web playground. Includes 23 comprehensive tests and performance benchmarks showing sub-microsecond operations. Production-ready with extensive validation and real-world scenarios.</Description>
-    <PackageTags>json;transformation;mapping;templating;jsonpath;data-transformation;json-processing;conditional-logic;aggregation;math-operations;multi-condition;performance;benchmarks;interactive-playground;rest-api</PackageTags>
+    <Description>A high-performance .NET JSON transformation engine with advanced conditional logic, string operations, conditional aggregation, and comprehensive test coverage. Features: string comparison operators (contains, startsWith, endsWith), complex multi-condition support (AND/OR operators), conditional aggregation with array filtering, mathematical operations, string concatenation, aggregation functions, field mapping, and interactive web playground. Includes 36 comprehensive tests and performance benchmarks showing sub-microsecond operations. Production-ready with extensive validation and real-world scenarios.</Description>
+    <PackageTags>json;transformation;mapping;templating;jsonpath;data-transformation;json-processing;conditional-logic;conditional-aggregation;string-operations;aggregation;math-operations;multi-condition;performance;benchmarks;interactive-playground;rest-api;array-filtering;string-comparison</PackageTags>
     <PackageProjectUrl>https://github.com/NextGenPowerToys/dotnet-json-transform</PackageProjectUrl>
     <RepositoryUrl>https://github.com/NextGenPowerToys/dotnet-json-transform</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>🚀 Version 2.1.0 - Production Ready Release! 
-    
-✨ NEW FEATURES:
-• Advanced multi-condition support with AND/OR operators (A && B || C)
-• Complex conditional expressions with parentheses grouping
-• 23 comprehensive test cases covering real-world scenarios
-• Performance benchmark suite with 8 operation types
-• Interactive web playground with live transformation preview
-• Enhanced CLI with multiple execution modes
-
-⚡ PERFORMANCE:
-• Math operations: 6.35μs (outstanding performance)
-• Complex multi-conditions: 39.17μs (excellent for complex logic)
-• Comprehensive benchmarks included
-
-🧪 TESTING:
-• 23 test cases with 100% pass rate
-• Complex multi-condition scenarios
-• HTML test and benchmark reports
-• Real-world integration tests
-
-Ready for production use with comprehensive documentation and examples.</PackageReleaseNotes>
+    <PackageReleaseNotes>Version 2.3.0 - String Operations Release! NEW FEATURES: String Operations - Advanced string comparison operators (contains, startsWith, endsWith) integrated with conditional logic and aggregation filters, Enhanced template engine with string operators in JSONPath expressions, Complex employee processing examples with email filtering and badge generation. EXAMPLES: Interactive playground updated with sophisticated string operations examples, Console examples enhanced with 3 string operation sub-scenarios, API documentation with new "String Operations" transformation service. TESTING: 36 test cases with 100% pass rate (added 10 string operations tests), Production scenarios including email validation and file processing, Enhanced test coverage for string comparison operations. DOCUMENTATION: Complete query templates reference (query-templates.md) included in package, Updated README with all functionality and comprehensive examples, Full documentation coverage for all transformation capabilities. Ready for production use with complete string processing capabilities.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Copyright>Copyright (c) 2025 NextGetPowerToys</Copyright>
+    <Copyright>Copyright (c) 2025 NextGenPowerToys</Copyright>
     
     <!-- Code Analysis and Quality -->
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
@@ -68,6 +47,7 @@ Ready for production use with comprehensive documentation and examples.</Package
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\query-templates.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
